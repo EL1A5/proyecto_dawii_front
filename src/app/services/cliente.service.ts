@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { AppSettings } from '../app.settings';
 import { Cliente } from '../models/cliente.model';
 
-const baseUrlUtil = AppSettings.API_ENDPOINT+ 'util';
+const baseUrlUtil = AppSettings.API_ENDPOINT+ '/util';
 const baseUrlCliente = AppSettings.API_ENDPOINT+ '/cliente';
 
 @Injectable({
