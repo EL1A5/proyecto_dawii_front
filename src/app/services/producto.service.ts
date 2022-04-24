@@ -16,6 +16,9 @@ export class ProductoService {
 
   constructor(private http:HttpClient) { }
 
+  registrarProducto(data:Producto):Observable<any>{
+    return this.http.post(baseUrlProducto,data)
+  }
 
 }
 
