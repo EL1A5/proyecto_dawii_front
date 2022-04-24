@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { TipoReclamo } from '../models/tipo-reclamo.model';
 import { AppSettings } from '../app.settings';
 
-const baseUrlUtil = AppSettings.API_ENDPOINT+ '/util';
+const baseUrlUtil = AppSettings.API_ENDPOINT+ 'util';
 
 @Injectable({
   providedIn: 'root'
