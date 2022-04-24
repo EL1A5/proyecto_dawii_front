@@ -8,27 +8,19 @@
             </div>
         </div>
   
-        <div class="row" style="margin-top: 3%">
+        <div class="row" style="margin-top: 2%">
                 <div class="col-lg-6">
                     <label for="descripcion">descripcion</label>
                     <input type="text" class="form-control"name="descripcion" id="descripcion"   [(ngModel)]="reclamo.descripcion"  />
                 </div>
             
-                <div class="col-lg-3">
-                    <label for="fechaRegistro">fechaRegistro</label>
-                    <input type="text" class="form-control" name="fechaRegistro" id="fechaRegistro" maxlength="20" [(ngModel)]="reclamo.fechaRegistro"  />
-                </div>
-
-                <div class="col-lg-3">
-                        <label for="estado">estado</label>
-                        <input type="text" class="form-control" name="estado" id="estado" maxlength="2" [(ngModel)]="reclamo.estado"   />
-                </div>
+               
          </div>
   
         <div class="row" style="margin-top: 3%">
         <div class="col-lg-3">
             <label for="fechaCompra">fechaCompra</label>
-            <input type="text"  class="form-control" id="fechaCompra"  name="fechaCompra" maxlength="20" [(ngModel)]="reclamo.fechaCompra"  />
+            <input type="date"  class="form-control" id="fechaCompra"  name="fechaCompra" maxlength="20" [(ngModel)]="reclamo.fechaCompra"  />
         </div>
 
         <div class="col-lg-3">
