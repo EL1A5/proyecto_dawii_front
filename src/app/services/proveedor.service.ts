@@ -14,6 +14,8 @@ const baseUrlProveedor = AppSettings.API_ENDPOINT+ '/proveedor';
 export class ProveedorService {
 
   constructor(private http: HttpClient) { }
-
+  registraProveedor(proveedor: Proveedor):Observable<any>{
+    return this.http.post<any>(baseUrlProveedor, proveedor);
+}
   
 }
