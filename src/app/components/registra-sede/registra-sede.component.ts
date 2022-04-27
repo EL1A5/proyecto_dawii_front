@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Pais } from 'src/app/models/pais.model';
+import { Sede } from 'src/app/models/sede.model';
+import { PaisService } from 'src/app/services/pais.service';
+import { SedeService } from 'src/app/services/sede.service';
 
 @Component({
   selector: 'app-registra-sede',
@@ -7,7 +11,31 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RegistraSedeComponent implements OnInit {
 
-  constructor() { }
+  paises?:Pais[] = [];
+
+  sede?:Sede = {
+    pais:{
+      idPais:-1,
+      iso:"-1",
+      nombre:"-1",
+    }
+  }
+
+  constructor(private paisService:PaisService, private sedeService:SedeService) { 
+    console.log(">>> inserta pais >>> Pais >>" + this.sede?.pais?.nombre);
+    this.paisService.listaPais().subscribe(
+          (x) => this.paises = x
+    );
+  }
+  
+  
+
+  insertado(){
+    this.sedeService.insertaSede(this.sede).subscribe(
+            (x) => alert(x.mensaje)
+
+    );
+  }
 
   ngOnInit(): void {
   }

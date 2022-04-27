@@ -14,6 +14,8 @@ export class SedeService {
 
   constructor(private http:HttpClient) { }
 
- 
+  insertaSede(sede:any): Observable<any>{
+    return this.http.post(baseUrlSede, sede);
+  }
 
 }
