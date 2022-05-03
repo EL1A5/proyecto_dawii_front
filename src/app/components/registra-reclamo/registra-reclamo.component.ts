@@ -29,6 +29,7 @@ export class RegistraReclamoComponent implements OnInit {
   };
 
   constructor(private tipoReclamoService:TipoReclamoService,private ReclamoService:ReclamoService,private clienteService:ClienteService){
+
     this.tipoReclamoService. listaTipoReclamo().subscribe(
       (x)=> this.TipoReclamo=x
       );
