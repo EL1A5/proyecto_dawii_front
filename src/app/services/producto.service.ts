@@ -20,6 +20,11 @@ export class ProductoService {
     return this.http.post(baseUrlProducto,data)
   }
 
+  listaProducto(nombre:string, serie:string, idPais:number, estado:number):Observable<any> {
+    const params = new HttpParams().set("nombre", nombre).set("serie", serie).set("idPais", idPais).set("estado", estado);  
+    return this.http.get<any>(baseUrlProducto + "/listaProductosPorFiltros", {params});
+ }
+
 }
 
 
