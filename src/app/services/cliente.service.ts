@@ -7,6 +7,7 @@ import { Cliente } from '../models/cliente.model';
 const baseUrlUtil = AppSettings.API_ENDPOINT+ '/util';
 const baseUrlCliente = AppSettings.API_ENDPOINT+ '/rest/cliente';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -22,6 +23,11 @@ export class ClienteService {
   registraCliente(cliente: Cliente):Observable<any>{
     return this.http.post<any>(baseUrlCliente, cliente);
 }
+listaClientes(nombres:string, dni:string, idUbigeo:number, estado:number):Observable<any> {
+  const params = new HttpParams().set("nombres", nombres).set("dni", dni).set("idUbigeo", idUbigeo).set("estado", estado);  
+  return this.http.get<any>(baseUrlCliente + "/listaClienteConParametros", {params});
+}
+
 
 }
   
