@@ -17,8 +17,7 @@ export class ConsultaClienteComponent implements OnInit {
   selProvincia:string = "-1"; 
   selDistrito:number = -1;
   estado:boolean = true;
-  
-
+ 
   departamentos: string[]  = [];
   provincias: string[]  = [];
   distritos: Ubigeo[]  = [];

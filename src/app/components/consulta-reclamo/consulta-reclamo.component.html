@@ -1,49 +1,89 @@
 <div>
 
-    <form class="content">
+    <form class="content" (submit)="consultaReclamo()">
 
 
         <div class="submit-form">
 
             <div class="row">
                 <div class="col-lg-12">
-                    <h6>Consulta de Reclamo</h6>
+                    <h6>Consulta de docente</h6>
                 </div>
             </div>
 
-
-
             <div class="row" style="margin-top: 2%">
-
+                <label for="descripcion" class="col-lg-1">descripcion</label>
                 <div class="col-lg-4">
-                    <label for="distrito">tipoReclamo</label>
-                    <select id="tipoReclamo" name="tipoReclamo" class="form-control">
-                        <option value="-1">[Seleccione]</option>
-                        <option value="1">Error del sistema</option>
-                        <option value="2">Devolución de producto</option>
-                        <option value="3">Atención de personal</option>
+                    <input type="text" class="form-control" name="descripcion" id="descripcion" [(ngModel)]= "descripcion"/>
 
-
-                    </select>
                 </div>
+
+
+                <div class="col-lg-2">
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="estado" checked name="estado" [(ngModel)]= "estado"/>
+                        <label class="custom-control-label" for="estado">Estado</label>
+                    </div>
+                </div>
+
                 <div class="col-lg-2">
                     <button class="btn btn-success">Filtrar</button>
                 </div>
+
             </div>
+            <div class="row" style="margin-top: 2%">
+                <div class="col-lg-3">
+                    <label for="fechaCompra">fechaCompra</label>
+                    <input type="date"  class="form-control" id="fechaCompra"  name="fechaCompra" maxlength="20" [(ngModel)]="fechaCompra"  />
+                </div>
+
+                <div class="col-lg-4">
+                    <label for="Cliente">Cliente</label>
+                    <select id="Cliente" name="Cliente" class="form-control"[(ngModel)]="selCliente">
+                        <option value="-1">[Seleccione]</option>
+                        <option *ngFor="let aux of Cliente" value="{{ aux.idCliente }}">
+                            {{ aux.nombres }}
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-lg-4">
+                    <label for="provincia">TipoReclamo</label>
+                    <select id="TipoReclamo" name="TipoReclamo" class="form-control" [(ngModel)]="selTipo">
+                        <option value="-1">[Seleccione]</option>
+                        <option *ngFor="let aux of TipoReclamo" value="{{ aux.idTipoReclamo }}">
+                            {{ aux.descripcion }}
+                        </option>
+
+                    </select>
+                </div>
+            </div>
+
 
             <div class="row" style="margin-top: 3%">
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th>IDReclamo</th>
-                            <th>IDCliente</th>
-                            <th>Descripcion</th>
+                            <th>ID</th>
+                            <th>descripcion</th>
+                            <th>fechaRegistro</th>
                             <th>fechaCompra</th>
-                            <th>tipoReclamo</th>
+                            <th>Estado</th>
+                            <th>Cliente</th>
+                            <th>TipoReclamo</th>
+
                         </tr>
                     </thead>
                     <tbody>
-
+                        <tr *ngFor="let aux of reclamo">
+                            <td>{{ aux.idReclamo }}</td>
+                            <td>{{ aux.descripcion }}</td>
+                            <td>{{ aux.fechaRegistro }}</td>
+                            <td>{{ aux.fechaCompra }}</td>
+                            <td>{{ aux.estado==1?'Activo':'Inactivo' }}
+                            <td>{{ aux.cliente?.nombres }}</td>
+                            <td>{{ aux.tipoReclamo?.descripcion }}</td>
+                        </tr>
 
                     </tbody>
 
