@@ -8,5 +8,6 @@ export class Sede {
     fechaCreacion?:Date;
 
     codigoPostal?:string;
+    estado?:number;
     pais?:Pais;
 }

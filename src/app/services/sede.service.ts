@@ -18,4 +18,10 @@ export class SedeService {
     return this.http.post(baseUrlSede, sede);
   }
 
+  listaSede(nombre:string, direccion:string, idPais:number, estado:number):Observable<any> {
+    const params = new HttpParams().set("nombre", nombre).set("direccion", direccion).set("idPais", idPais).set("estado", estado);
+    return this.http.get<any>(baseUrlSede + "/listaSedeConParametros", {params});
+  }
+
+
 }
