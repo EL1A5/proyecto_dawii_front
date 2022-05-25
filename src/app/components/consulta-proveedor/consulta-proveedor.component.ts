@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Proveedor } from 'src/app/models/proveedor.model';
+import { Ubigeo } from 'src/app/models/ubigeo.model';
+import { ProveedorService } from 'src/app/services/proveedor.service';
+import { UbigeoService } from 'src/app/services/ubigeo.service';
 
 @Component({
   selector: 'app-consulta-proveedor',
@@ -7,9 +11,50 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ConsultaProveedorComponent implements OnInit {
 
-  constructor() { }
+    razonsocial: string = "";
+    ruc: string = "";
+    selDepartamento:string = "-1"; 
+    selProvincia:string = "-1"; 
+    selDistrito:number = -1;
+    estado:boolean = true;
 
-  ngOnInit(): void {
+    departamentos: string[]  = [];
+    provincias: string[]  = [];
+    distritos: Ubigeo[]  = [];
+    proveedor: Proveedor[] = [];
+
+  constructor(private ubigeoService: UbigeoService, private proveedorService:ProveedorService) {
+
+    ubigeoService.listarDepartamento().subscribe(
+      (x) => this.departamentos = x
+    );
+   }
+ 
+ consultaProveedor(){
+    this.proveedorService.listaProveedores(this.razonsocial, this.ruc, this.selDistrito, this.estado?1:0).subscribe(
+          (x) => {
+              this.proveedor = x.lista;
+              alert(x.mensaje);
+          }
+    );
+}
+
+  cargaProvincia(){
+        this.ubigeoService.listaProvincias(this.selDepartamento).subscribe(
+                (x)  => this.provincias = x      
+        );
+        this.selProvincia = "-1";
+        this.distritos = [];
+        this.selDistrito = -1;
   }
+  cargaDistrito(){
+        this.ubigeoService.listaDistritos(this.selDepartamento, this.selProvincia).subscribe(
+                (x)  => this.distritos = x      
+        );
+        this.selDistrito = -1;
+  }
+
+  ngOnInit(): void {}
+
 
 }
