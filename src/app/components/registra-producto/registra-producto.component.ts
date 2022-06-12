@@ -19,6 +19,8 @@ export class RegistraProductoComponent implements OnInit {
      marca:{idMarca:0},
      pais:{idPais:0}
    };
+
+   
   constructor(private marcaService : MarcaService, private paisesService : PaisService ,private productService:ProductoService  ) { 
 
     this.marcaService.listaMarca().subscribe(
@@ -42,5 +44,16 @@ export class RegistraProductoComponent implements OnInit {
 
   ngOnInit(): void {
   }
+
+
+  //METODOS DE CRUD
+
+
+
+
+
+
+
+
 
 }
