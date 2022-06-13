@@ -28,6 +28,19 @@ listaClientes(nombres:string, dni:string, idUbigeo:number, estado:number):Observ
   return this.http.get<any>(baseUrlCliente + "/listaClienteConParametros", {params});
 }
 
+//............crud cliente
+
+listClientes(filtro:string):Observable<Cliente[]> {
+  return this.http.get<Cliente[]>(baseUrlCliente + "/listaClientePorNombreLike/"+ filtro);
+}  
+
+  updateClientes(obj: Cliente): Observable<any>{
+return this.http.put(baseUrlCliente + "/actualizaCliente/", obj);
+}
+  deleteClientes(id: any): Observable<any>{
+  return this.http.delete(baseUrlCliente + "/eliminaCliente/" + id);
+}
+//.................................
 
 }
   
