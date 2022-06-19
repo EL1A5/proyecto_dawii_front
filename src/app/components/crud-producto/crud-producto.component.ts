@@ -31,15 +31,15 @@ export class CrudProductoComponent implements OnInit {
     idProducto:0,
     nombre: "",
 		serie: "0",
-		durabilidad: "",
+		durabilidad:"",
 	
 		fechaVigencia : this.fehca,
 		precio: 0,
 		stock: 0,
 	
 		estado: 1,
-		marca:{idMarca:0} ,
-   	pais:{idPais:0}
+    marca:{idMarca:-1,nombre:""} ,
+    pais:{idPais:-1,nombre:""}
 	
   };
 
@@ -47,16 +47,17 @@ export class CrudProductoComponent implements OnInit {
 
 
    //para verificar que e pulsó el boton
-   submitted = false;
+   //submitted = false;
 
    constructor(private marcaService : MarcaService, private paisesService : PaisService ,private productService:ProductoService  ) { 
+    
     this.marcaService.listaMarca().subscribe(
       (x)=>this.marcas=x
     );
     this.paisesService.listaPais().subscribe(
       (x)=>this.paises=x
     );
-
+    
   }
 
 
@@ -86,31 +87,17 @@ export class CrudProductoComponent implements OnInit {
         this.productService.actualizaProducto(aux).subscribe();
   }
 
-  buscar(aux :Producto){
-    this.producto  = aux;
-
-    this.marcaService.listaMarca().subscribe(
-      response =>  this.marcas= response
-    );
-
-  this.paisesService.listaPais().subscribe(
-    response =>  this.paises= response
-  );
-
-}
+ 
 
 
   registra(){
-    this.submitted = true;
-    this.producto.estado = 1;
-    console.log(" ==> registra ==> nombre ==> " + this.producto.nombre);
-    console.log(" ==> registra ==> fecha ==> " + this.producto.fechaVigencia);
-    console.log(" ==> registra ==> pais ==> " + this.producto.pais?.nombre);
-    console.log(" ==> registra ==> marca ==> " + this.producto.marca?.nombre);
-    console.log(this.producto)
+    //this.submitted = true;
+    //this.producto.estado = 1;
+
 
     this.productService.registrarProducto(this.producto).subscribe(
       (x) => {
+        document.getElementById("btn_reg_limpiar")?.click();
         document.getElementById("btn_reg_cerrar")?.click();
         Swal.fire('Mensaje', x.mensaje,'success');
         this.productService.listaProductoFiltro(this.filtro==""?"todos":this.filtro).subscribe(
@@ -136,28 +123,40 @@ export class CrudProductoComponent implements OnInit {
           stock: 0,
         
           estado: 1,
-          marca:{idMarca:0} ,
-           pais:{idPais:0}
+          marca:{idMarca:-1,nombre:""} ,
+          pais:{idPais:-1,nombre:""}
         }
 
 
+
+}
+buscar(aux :Producto){
+  this.producto  = aux;
+
+  this.marcaService.listaMarca().subscribe(
+    response =>  this.marcas= response
+  );
+
+  this.paisesService.listaPais().subscribe(
+    response =>  this.paises= response
+  );
 
 }
 
 
 
 
-
 actualiza(){
-  this.submitted = true;
+  //this.submitted = true;
 
  
 
-    this.submitted = false;
+    //this.submitted = false;
 
     this.productService.actualizaProducto(this.producto).subscribe(
       (x) => {
-        document.getElementById("btn_reg_cerrar")?.click();
+        document.getElementById("btn_reg_limpiar")?.click();
+        document.getElementById("btn_act_cerrar")?.click();
         Swal.fire('Mensaje', x.mensaje,'success');
         this.productService.listaProductoFiltro(this.filtro==""?"todos":this.filtro).subscribe(
                 (x) => this.productos = x
@@ -182,9 +181,9 @@ actualiza(){
       precio: 0,
       stock: 0,
     
-      estado: 0,
-      marca:{idMarca:0} ,
-       pais:{idPais:0}
+      estado: 1,
+      marca:{idMarca:-1,nombre:""} ,
+       pais:{idPais:-1,nombre:""}
     }
 }
 

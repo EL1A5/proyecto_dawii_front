@@ -1,4 +1,4 @@
-
+<!---->
 <div class="container" >
     <h5>Crud de Productos</h5>
 
@@ -74,46 +74,92 @@
                 </div>
                 
                 <div class="modal-body">
-                    <form class="content"  (ngSubmit)="registra()">
+                    <form class="content"  (ngSubmit)="registra()" #registraForm="ngForm">
                         <div class="submit-form">
                             
                                 <div  class="row">
-                                    <div class="col-lg-8">
+                                    <div class="col-lg-4">
                                         <label for="id_reg_nombre">Nombre</label>
-                                        <input  [(ngModel)]="producto.nombre" type="text" placeholder="Ingrese el nombre" class="form-control" name="nombre" id="id_reg_nombre" />
-                                        
+
+                                        <input  [(ngModel)]="producto.nombre" type="text" placeholder="Ingrese el nombre" class="form-control" name="nombre" id="id_reg_nombre" #validaNombre="ngModel" required pattern="[a-zA-Z ]{3,30}"/>
+
+                                        <div *ngIf="validaNombre.invalid && (validaNombre.dirty || validaNombre.touched)" class="alert alert-danger">
+                                            <div *ngIf="validaNombre.errors?.['required']">
+                                                El nombre es obligatorio
+                                            </div>   
+                                            <div *ngIf="validaNombre.errors?.['pattern']">
+                                                El nombre es de 3 a 30 caracteres
+                                            </div> 
+                                         </div>   
                                     </div>
                                     
                                     <div class="col-lg-4">
                                         <label for="id_reg_dni">Serie</label>
-                                        <input  [(ngModel)]="producto.serie" t type="text" placeholder="Ingrese DNI" class="form-control" name="dni" id="id_reg_dni"  maxlength="8"/>
-                                        
+                                        <input  [(ngModel)]="producto.serie"  type="text" min="1"placeholder="Ingrese Nº de Serie" class="form-control" name="dni" id="id_reg_dni"  #validaSerie="ngModel" required pattern="[0-9]{9}"/>
+
+                                        <div *ngIf="validaSerie.invalid && (validaSerie.dirty || validaSerie.touched)" class="alert alert-danger">
+                                            <div *ngIf="validaSerie.errors?.['required']">
+                                                Nº de Serie es obligatorio
+                                            </div>  
+                                            <div *ngIf="validaSerie.errors?.['pattern']">
+                                                Nº de Serie es de 9 dígitos
+                                             </div>    
+                                       </div> 
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <label for="durabilidad">Durabilidad</label>
+                                        <select  id="durabilidad" name="durabilidad" class="form-control" [(ngModel)]="producto.durabilidad" 
+                                        #validaDurable="ngModel" required>
+                                            <option value=""> [Seleccione] </option>   
+                                            <option value="Fragil"> Fragil </option>
+                                            <option value="Durable"> Durable </option>
+                                        </select>
+                                        <div *ngIf="validaDurable.invalid && (validaDurable.dirty || validaDurable.touched) " class="alert alert-danger">
+                                            La durabilidad es obligatorio
+                              </div>
                                     </div>
                                 </div>
 
 
                                 <div class="row" style="margin-top: 5%">
                                     
-                                    <div class="col-lg-3">
-                                        <label for="durabilidad">Durabilidad</label>
-                                        <select  id="durabilidad" name="durabilidad" class="form-control" [(ngModel)]="producto.durabilidad" >
-                                            <option value="-1"> [Seleccione] </option>   
-                                            <option value="Fragil"> Fragil </option>
-                                            <option value="Durable"> Durable </option>
-                                        </select>
-                                    </div>
+                                   
 
-                                    <div class="col-lg-3">
+                                    <div class="col-lg-4">
                                         <label for="fechaVigencia">Fecha Vigencia</label>
-                                        <input type="date"  class="form-control" id="fechaVigencia"  name="fechaVigencia" maxlength="2"  [(ngModel)]="producto.fechaVigencia"  />
+                                        <input type="date"  class="form-control" id="fechaVigencia"  name="fechaVigencia"   [(ngModel)]="producto.fechaVigencia" #validaFecha="ngModel" pattern="^(19|20)(((([02468][048])|([13579][26]))-02-29)|(\d{2})-((02-((0[1-9])|1\d|2[0-8]))|((((0[13456789])|1[012]))-((0[1-9])|((1|2)\d)|30))|(((0[13578])|(1[02]))-31)))$"   />
+                                        <div *ngIf="validaFecha.invalid && (validaFecha.dirty || validaFecha.touched) " class="alert alert-danger">
+                                            La Fecha es obligatorio
+                                         </div>
                                     </div>
                                 
-                                    <div class="col-lg-3">
+                                    <div class="col-lg-4">
                                             <label for="precio">Precio</label>
-                                            <input type="text"  class="form-control" id="precio"  name="precio"  [(ngModel)]="producto.precio" />
+                                            <input type="text"  class="form-control" id="precio"  name="precio"  [(ngModel)]="producto.precio" #validaPrecio="ngModel" required pattern="[0-9]{2}"/>
+
+                                            <div *ngIf="validaPrecio.invalid && (validaPrecio.dirty || validaPrecio.touched)" class="alert alert-danger">
+                                                <div *ngIf="validaPrecio.errors?.['required']">
+                                                    Precio es obligatorio
+                                                </div>  
+                                                <div *ngIf="validaPrecio.errors?.['pattern']">
+                                                    Precio es de 2 dígitos
+                                                 </div>    
+                                           </div> 
                                     </div>
                             
-                                       
+                                    <div class="col-lg-4">
+                                        <label for="stock">Stock</label>
+                                        <input type="text"  class="form-control" id="stock"  name="stock" maxlength="40" [(ngModel)]="producto.stock" #validaStock="ngModel" required pattern="[0-9]{2}"/>
+
+                                        <div *ngIf="validaStock.invalid && (validaStock.dirty || validaStock.touched)" class="alert alert-danger">
+                                            <div *ngIf="validaStock.errors?.['required']">
+                                                Nº de Stock es obligatorio
+                                            </div>  
+                                            <div *ngIf="validaStock.errors?.['pattern']">
+                                                Nº de Stock es de 2 dígitos
+                                             </div>    
+                                       </div> 
+                                    </div>
                             
                                        
                                  </div>
@@ -121,30 +167,33 @@
                                     
                             
                                     
-                                 <div>
-                                    <div class="col-lg-3">
-                                        <label for="stock">Stock</label>
-                                        <input type="text"  class="form-control" id="stock"  name="stock" maxlength="40" [(ngModel)]="producto.stock" />
-                                    </div>
+                                 <div class="row" style="margin-top: 5%">
+                                   
                                 
-                                    <div class="col-lg-3">
+                                    <div class="col-lg-4">
                                         <label for="marca">Marca</label>
-                                        <select  id="marca" name="marca" class="form-control"[(ngModel)]="producto.marca!.idMarca"  >
-                                            <option value="0"> [Seleccione] </option>   
+                                        <select  id="marca" name="marca" class="form-control"[(ngModel)]="producto.marca!.idMarca" #validaMarca="ngModel" pattern="[0-9]{1,9}" >
+                                            <option value="-1"> [Seleccione] </option>   
                                             <option *ngFor="let aux of marcas" value="{{aux.idMarca}}">
                                                 {{aux.nombre}}    
                                                 </option> 
                                         </select>
+                                        <div *ngIf="validaMarca.invalid && (validaMarca.dirty || validaMarca.touched) " class="alert alert-danger">
+                                            La marca es obligatorio
+                                         </div>
                                     </div>
                             
-                                    <div class="col-lg-3">
+                                    <div class="col-lg-4">
                                         <label for="pais">Pais</label>
-                                        <select  id="pais" name="pais" class="form-control" [(ngModel)]="producto.pais!.idPais" >
-                                            <option value="0"> [Seleccione] </option>   
+                                        <select  id="pais" name="pais" class="form-control" [(ngModel)]="producto.pais!.idPais" #validaPais="ngModel" pattern="[0-9]{1,9}"  >
+                                            <option value="-1"> [Seleccione] </option>   
                                             <option *ngFor="let aux of paises" value="{{aux.idPais}}">
                                                 {{aux.nombre}}    
                                                 </option> 
                                         </select>
+                                        <div *ngIf="validaPais.invalid && (validaPais.dirty || validaPais.touched) " class="alert alert-danger">
+                                            Pais es obligatorio
+                                         </div>
                                     </div>
                                 
                                 </div>
@@ -152,9 +201,10 @@
                         </div> 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btn_reg_cerrar" style="width: 100px;">Close</button>
+                            <button type="reset" class="btn btn-secondary" id="btn_reg_limpiar" style="width: 100px;">Limpiar</button>
                             <div class="form-group text-center">
                                 <div class="col-lg-12">
-                                    <button id="id_reg_registra"  class="btn btn-success form-control"style="width: 100px;" [disabled]="submitted ">Registrar</button>
+                                    <button id="id_reg_registra"  class="btn btn-success form-control"style="width: 100px;"  [disabled]="!registraForm.form.valid">Registrar</button>
                                 </div>
                             </div>
                         </div>
@@ -180,46 +230,92 @@
                 </div>
                 <div class="modal-body">
 
-                    <form class="content" (ngSubmit)="actualiza()">
+                    <form class="content" (ngSubmit)="actualiza()" #actualizaForm="ngForm">
                         <div class="submit-form">
                             
                             <div  class="row">
-                                <div class="col-lg-8">
+                                <div class="col-lg-4">
                                     <label for="id_reg_nombre">Nombre</label>
-                                    <input [(ngModel)]="producto.nombre" type="text" placeholder="Ingrese el nombre" class="form-control" name="nombre" id="id_reg_nombre" />
-                                    
+
+                                    <input  [(ngModel)]="producto.nombre" type="text" placeholder="Ingrese el nombre" class="form-control" name="nombre" id="id_reg_nombre" #validaNombre="ngModel" required pattern="[a-zA-Z ]{3,30}"/>
+
+                                    <div *ngIf="validaNombre.invalid && (validaNombre.dirty || validaNombre.touched)" class="alert alert-danger">
+                                        <div *ngIf="validaNombre.errors?.['required']">
+                                            El nombre es obligatorio
+                                        </div>   
+                                        <div *ngIf="validaNombre.errors?.['pattern']">
+                                            El nombre es de 3 a 30 caracteres
+                                        </div> 
+                                     </div>   
                                 </div>
                                 
                                 <div class="col-lg-4">
                                     <label for="id_reg_dni">Serie</label>
-                                    <input  [(ngModel)]="producto.serie"  type="text" placeholder="Ingrese DNI" class="form-control" name="dni" id="id_reg_dni"  maxlength="8"/>
-                                    
+                                    <input  [(ngModel)]="producto.serie"  type="text" min="1"placeholder="Ingrese Nº de Serie" class="form-control" name="dni" id="id_reg_dni"  #validaSerie="ngModel" required pattern="[0-9]{9}"/>
+
+                                    <div *ngIf="validaSerie.invalid && (validaSerie.dirty || validaSerie.touched)" class="alert alert-danger">
+                                        <div *ngIf="validaSerie.errors?.['required']">
+                                            Nº de Serie es obligatorio
+                                        </div>  
+                                        <div *ngIf="validaSerie.errors?.['pattern']">
+                                            Nº de Serie es de 9 dígitos
+                                         </div>    
+                                   </div> 
+                                </div>
+                                <div class="col-lg-4">
+                                    <label for="durabilidad">Durabilidad</label>
+                                    <select  id="durabilidad" name="durabilidad" class="form-control" [(ngModel)]="producto.durabilidad" 
+                                    #validaDurable="ngModel" required>
+                                        <option value=""> [Seleccione] </option>   
+                                        <option value="Fragil"> Fragil </option>
+                                        <option value="Durable"> Durable </option>
+                                    </select>
+                                    <div *ngIf="validaDurable.invalid && (validaDurable.dirty || validaDurable.touched) " class="alert alert-danger">
+                                        La durabilidad es obligatorio
+                          </div>
                                 </div>
                             </div>
 
 
                             <div class="row" style="margin-top: 5%">
                                 
-                                <div class="col-lg-3">
-                                    <label for="durabilidad">Durabilidad</label>
-                                    <select  id="durabilidad" name="durabilidad" class="form-control" [(ngModel)]="producto.durabilidad" >
-                                        <option value="-1"> [Seleccione] </option>   
-                                        <option value="Fragil"> Fragil </option>
-                                        <option value="Durable"> Durable </option>
-                                    </select>
-                                </div>
+                               
 
-                                <div class="col-lg-3">
+                                <div class="col-lg-4">
                                     <label for="fechaVigencia">Fecha Vigencia</label>
-                                    <input type="date"  class="form-control" id="fechaVigencia"  name="fechaVigencia" maxlength="2"  [(ngModel)]="producto.fechaVigencia"  />
+                                    <input type="date"  class="form-control" id="fechaVigencia"  name="fechaVigencia"   [(ngModel)]="producto.fechaVigencia" #validaFecha="ngModel" pattern="^(19|20)(((([02468][048])|([13579][26]))-02-29)|(\d{2})-((02-((0[1-9])|1\d|2[0-8]))|((((0[13456789])|1[012]))-((0[1-9])|((1|2)\d)|30))|(((0[13578])|(1[02]))-31)))$"   />
+                                    <div *ngIf="validaFecha.invalid && (validaFecha.dirty || validaFecha.touched) " class="alert alert-danger">
+                                        La Fecha es obligatorio
+                                     </div>
                                 </div>
                             
-                                <div class="col-lg-3">
+                                <div class="col-lg-4">
                                         <label for="precio">Precio</label>
-                                        <input type="text"  class="form-control" id="precio"  name="precio"  [(ngModel)]="producto.precio" />
+                                        <input type="text"  class="form-control" id="precio"  name="precio"  [(ngModel)]="producto.precio" #validaPrecio="ngModel" required pattern="[0-9]{2}"/>
+
+                                        <div *ngIf="validaPrecio.invalid && (validaPrecio.dirty || validaPrecio.touched)" class="alert alert-danger">
+                                            <div *ngIf="validaPrecio.errors?.['required']">
+                                                Precio es obligatorio
+                                            </div>  
+                                            <div *ngIf="validaPrecio.errors?.['pattern']">
+                                                Precio es de 2 dígitos
+                                             </div>    
+                                       </div> 
                                 </div>
                         
-                                   
+                                <div class="col-lg-4">
+                                    <label for="stock">Stock</label>
+                                    <input type="text"  class="form-control" id="stock"  name="stock" maxlength="40" [(ngModel)]="producto.stock" #validaStock="ngModel" required pattern="[0-9]{2}"/>
+
+                                    <div *ngIf="validaStock.invalid && (validaStock.dirty || validaStock.touched)" class="alert alert-danger">
+                                        <div *ngIf="validaStock.errors?.['required']">
+                                            Nº de Stock es obligatorio
+                                        </div>  
+                                        <div *ngIf="validaStock.errors?.['pattern']">
+                                            Nº de Stock es de 2 dígitos
+                                         </div>    
+                                   </div> 
+                                </div>
                         
                                    
                              </div>
@@ -227,44 +323,48 @@
                                 
                         
                                 
-                             <div>
-                                <div class="col-lg-3">
-                                    <label for="stock">Stock</label>
-                                    <input type="text"  class="form-control" id="stock"  name="stock" maxlength="40" [(ngModel)]="producto.stock" />
-                                </div>
+                             <div class="row" style="margin-top: 5%">
+                               
                             
-                                <div class="col-lg-3">
+                                <div class="col-lg-4">
                                     <label for="marca">Marca</label>
-                                    <select  id="marca" name="marca" class="form-control"[(ngModel)]="producto.marca!.idMarca"  >
-                                        <option value="0"> [Seleccione] </option>   
+                                    <select  id="marca" name="marca" class="form-control"[(ngModel)]="producto.marca!.idMarca" #validaMarca="ngModel" pattern="[0-9]{1,9}" >
+                                        <option value="-1"> [Seleccione] </option>   
                                         <option *ngFor="let aux of marcas" value="{{aux.idMarca}}">
                                             {{aux.nombre}}    
                                             </option> 
                                     </select>
+                                    <div *ngIf="validaMarca.invalid && (validaMarca.dirty || validaMarca.touched) " class="alert alert-danger">
+                                        La marca es obligatorio
+                                     </div>
                                 </div>
                         
-                                <div class="col-lg-3">
+                                <div class="col-lg-4">
                                     <label for="pais">Pais</label>
-                                    <select  id="pais" name="pais" class="form-control" [(ngModel)]="producto.pais!.idPais" >
-                                        <option value="0"> [Seleccione] </option>   
+                                    <select  id="pais" name="pais" class="form-control" [(ngModel)]="producto.pais!.idPais" #validaPais="ngModel" pattern="[0-9]{1,9}"  >
+                                        <option value="-1"> [Seleccione] </option>   
                                         <option *ngFor="let aux of paises" value="{{aux.idPais}}">
                                             {{aux.nombre}}    
                                             </option> 
                                     </select>
+                                    <div *ngIf="validaPais.invalid && (validaPais.dirty || validaPais.touched) " class="alert alert-danger">
+                                        Pais es obligatorio
+                                     </div>
                                 </div>
                             
                             </div>
 
-                    </div> 
+                    </div>
 
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btn_act_cerrar">Close</button>
-                            <div class="form-group text-center">
-                                <div class="col-lg-12">
-                                    <button id="id_act_actualiza" class="btn btn-success form-control"[disabled]="submitted">Actualizar</button>
-                                </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btn_act_cerrar" style="width: 100px;">Close</button>
+                        <button type="reset" class="btn btn-secondary" id="btn_act_limpiar" style="width: 100px;">Limpiar</button>
+                        <div class="form-group text-center">
+                            <div class="col-lg-12">
+                                <button id="id_act_actualiza" class="btn btn-success form-control">Actualizar</button>
                             </div>
                         </div>
+                    </div>
                     </form>
 
 
