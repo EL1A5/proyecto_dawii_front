@@ -19,9 +19,9 @@ export class CrudClienteComponent implements OnInit {
  fecha=new Date(this.fechaNacimiento);
 
 //**** */
- departamentos: string[] = [];;
- provincias: string[] = [];;
- distritos: Ubigeo[] = [];;
+departamentos: string[] = [];
+provincias: string[] = [];
+distritos: Ubigeo[] = [];
 
  
 //Json para registrar o actualizar
@@ -35,45 +35,21 @@ export class CrudClienteComponent implements OnInit {
   direccion:"",
   estado:1,
   ubigeo:{
-    idUbigeo: -1,
+    idUbigeo:-1,
     departamento:"-1",
     provincia:"-1",
-    distrito:"-1",
+    distrito:"",
   }
-};
-
-//Declaracion de validaciones
-  formsRegistra = new FormGroup({
-    validaNombre: new FormControl('', [Validators.required, Validators.pattern('[a-zA-Z ]{3,30}')]),
-    validaApellidos: new FormControl('', [Validators.required, Validators.pattern('[a-zA-Z ]{3,30}')]),
-    validaDni: new FormControl('', [Validators.required,Validators.pattern('[0-9]{8}')]),
-    validaCorreo: new FormControl('', [Validators.required,Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]),
-    validaDireccion: new FormControl('', [Validators.required, Validators.pattern('[a-zA-Z ]{10,30}')]),
-    validaDepartamento: new FormControl('', [Validators.min(1)]),
-    validaProvincia: new FormControl('', [Validators.min(1)]),
-    validaDistrito: new FormControl('', [Validators.min(1)]),
-});
-
-formsActualiza = new FormGroup({
- validaNombre: new FormControl('', [Validators.required, Validators.pattern('[a-zA-Z ]{3,30}')]),
- validaApellidos: new FormControl('', [Validators.required, Validators.pattern('[a-zA-Z ]{3,30}')]),
- validaDni: new FormControl('', [Validators.required,Validators.pattern('[0-9]{8}')]),
- validaCorreo: new FormControl('', [Validators.required,Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]),
- validaDireccion: new FormControl('', [Validators.required, Validators.pattern('[a-zA-Z ]{10,30}')]),
- validaDepartamento: new FormControl('', [Validators.min(1)]),
- validaProvincia: new FormControl('', [Validators.min(1)]),
- validaDistrito: new FormControl('', [Validators.min(1)]),
- validaEstado: new FormControl('', [Validators.min(0)]),
-});
+}
 
 //para verificar que e pulsó el boton
 submitted = false;
 
 
 constructor(private ubigeoService:UbigeoService, private clienteService:ClienteService) { 
-     this.ubigeoService.listarDepartamento().subscribe(
-           (x) => this.departamentos = x
-     );
+  this.ubigeoService.listarDepartamento().subscribe(
+        (x) => this.departamentos = x
+  );
 }
 
 cargaProvincia(){
@@ -81,7 +57,7 @@ console.log(">>> Carga Provincia >> ");
 console.log(">>> Departamento >> " + this.Clientes.ubigeo?.departamento);
 
 this.ubigeoService.listaProvincias(this.Clientes.ubigeo?.departamento).subscribe(
-        (x) => this.provincias = x
+     (x) => this.provincias = x
 );
 
 this.Clientes.ubigeo!.provincia = "-1";
@@ -96,8 +72,8 @@ console.log(">>> Departamento >> " + this.Clientes.ubigeo?.departamento);
 console.log(">>> Provincia >> " + this.Clientes.ubigeo?.provincia);
 
 this.ubigeoService.listaDistritos(this.Clientes.ubigeo?.departamento, this.Clientes.ubigeo?.provincia).subscribe(
-        (x) => this.distritos = x
-  );
+     (x) => this.distritos = x
+);
 
 this.Clientes.ubigeo!.idUbigeo = -1;
 }
