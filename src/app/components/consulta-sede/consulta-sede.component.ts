@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Pais } from 'src/app/models/pais.model';
 import { Sede } from 'src/app/models/sede.model';
 import { PaisService } from 'src/app/services/pais.service';
 import { SedeService } from 'src/app/services/sede.service';
+
 
 @Component({
   selector: 'app-consulta-sede',
@@ -29,6 +31,12 @@ export class ConsultaSedeComponent implements OnInit {
   sedes:Sede[]=[];
 
 
+
+
+
+
+
+
   constructor(private paisService:PaisService, private sedeService:SedeService) { 
     console.log(">>> inserta pais >>> Pais >>" + this.sede?.pais?.nombre);
     this.paisService.listaPais().subscribe(
@@ -48,5 +56,13 @@ export class ConsultaSedeComponent implements OnInit {
 
   ngOnInit(): void {
   }
+
+
+
+
+
+
+
+
 
 }

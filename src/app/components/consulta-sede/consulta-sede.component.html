@@ -37,7 +37,7 @@
          <div class="row" style="margin-top: 3%">
             <div class="col-lg-4">
                 <label for="pais">País</label>
-                <select  id="pais" name="pais" class="form-control" [(ngModel)]="selPais" >
+                <select  id="pais" name="pais" class="form-control" [(ngModel)]="sede!.pais!.idPais" >
                     <option value="-1"> [Seleccione] </option>  
                     <option *ngFor="let aux of paises" value="{{ aux.idPais }}" >
                             {{ aux.nombre }}
