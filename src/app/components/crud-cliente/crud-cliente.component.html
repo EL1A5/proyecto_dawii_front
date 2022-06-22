@@ -1,1 +1,409 @@
-<p>crud-cliente works!</p>
+
+<div class="container" >
+    <h5>Crud de Cliente</h5>
+
+    <div class="col-md-23" style="margin-top: 3%">
+
+
+        <div class="row" style="height: 80px">
+            <div class="col-md-4">
+                <input [(ngModel)] = "filtro"  class="form-control"  id="id_txt_filtro" name="filtro" placeholder="Ingrese el nombre" type="text" maxlength="30" />
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-dark" id="id_btn_filtrar" style="width: 70px" (click)="consulta()">Filtrar</button>
+            </div>
+            <div class="col-md-2">
+                <button  type="button" data-toggle='modal' data-target="#idModalRegistrar" class='btn btn-success' style="width: 150px">Registrar</button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="content">
+
+                    <table id="id_table" class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>nombres</th>
+                                <th>Apellidos</th>
+                                <th>Fecha de nacimiento</th>
+                                <th>DNI</th>
+                                <th>correo</th>
+                                <th>Fecha de Registro</th>
+                                <th>Direccion</th>
+                                <th>Ubigeo</th>
+                                <th>Estado</th>
+                                <th style="width: 7%"></th>
+                                <th style="width: 7%"></th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let aux of cliente">
+                                <td>{{ aux.idCliente }}</td>   
+                                <td>{{ aux.nombres }}</td>   
+                                <td>{{ aux.apellidos }}</td>   
+                                <td>{{ aux.fechaNacimiento }}</td>   
+                                <td>{{ aux.dni }}</td>   
+                                <td>{{ aux.correo }}</td>   
+                                <td>{{ aux.fechaRegistro }}</td>  
+                                <td>{{ aux.direccion }}</td>  
+                                <td>{{ aux.ubigeo?.departamento }} - {{ aux.ubigeo?.provincia }} - {{ aux.ubigeo?.distrito }}</td>   
+                                <td>{{ aux.estado==1?'Activo':'Inactivo' }}</td>
+                                <td>
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="idEstado_{{ aux.idCliente }}" [checked]="aux.estado==1?true:false" name="estado" (change)="actualizaEstado(aux)" />         
+                                        <label class="custom-control-label" for="idEstado_{{ aux.idCliente }}"></label>
+                                    </div>    
+                                </td>
+                                <td><button type="button" style="width: 90px" class="btn btn-warning btn-sm"  data-toggle="modal" data-target="#idModalActualizar" (click)="buscar(aux)" >Editar</button></td>
+                                <td><button type="button" style="width: 90px" class="btn btn-danger btn-sm"  (click)="elimina(aux)" >Eliminar</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade"  id="idModalRegistrar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+        <div class="modal-dialog" style="max-width: 70%;">
+            <div class="modal-content" >
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Registro de Cliente</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                
+                <div class="modal-body">
+                    <form class="content"  (ngSubmit)="registra()" #registraForm="ngForm">
+                        <div class="submit-form">
+                            <div  class="row">
+                                <div class="col-lg-4">
+                                    <label for="nombres">Nombres Completos:</label>
+                                    <input type="text" class="form-control" name="nombres" id="nombres"  [(ngModel)] = "Clientes.nombres"  placeholder=" Ingrese Nombres Completos" #validaNombre="ngModel" required pattern="[a-zA-Z ]{3,30}"/>
+
+                                    <div *ngIf="validaNombre.invalid && (validaNombre.dirty || validaNombre.touched)" class="alert alert-danger">
+                                        <div *ngIf="validaNombre.errors?.['required']">
+                                            El nombre es obligatorio
+                                        </div>   
+                                        <div *ngIf="validaNombre.errors?.['pattern']">
+                                            El nombre es de 3 a 30 caracteres
+                                        </div> 
+                                     </div>   
+                                </div>
+                                
+                                <br>
+                        
+                            
+                                <div class="col-lg-4">
+                                    <label for="apellidos">Apellidos Completos:</label>
+                                    <input type="text" class="form-control" name="apellidos" id="apellidos"  [(ngModel)] = "Clientes.apellidos"  placeholder=" Ingrese Apellidos Completos" #validaApellidos="ngModel" required pattern="[a-zA-Z ]{3,30}"/>
+
+                                    <div *ngIf="validaApellidos.invalid && (validaApellidos.dirty || validaApellidos.touched)" class="alert alert-danger">
+                                        <div *ngIf="validaNombre.errors?.['required']">
+                                            Los apellidos son obligatorios
+                                        </div>   
+                                        <div *ngIf="validaApellidos.errors?.['pattern']">
+                                            Los apellidos son de 3 a 30 caracteres
+                                        </div> 
+                                     </div>   
+                                </div>
+                                <br>
+                            
+                
+                                <div class="col-lg-4">
+                                        <label for="fechaNacimiento">Fecha Nacimiento:</label>
+                                        <input type="date" class="form-control" name="fechaNacimiento" id="fechaNacimiento"  [(ngModel)] = "Clientes.fechaNacimiento" #validaFecha="ngModel" pattern="^(19|20)(((([02468][048])|([13579][26]))-02-29)|(\d{2})-((02-((0[1-9])|1\d|2[0-8]))|((((0[13456789])|1[012]))-((0[1-9])|((1|2)\d)|30))|(((0[13578])|(1[02]))-31)))$"   />
+                                        <div *ngIf="validaFecha.invalid && (validaFecha.dirty || validaFecha.touched) " class="alert alert-danger">
+                                            La fecha es obligatoria
+                                         </div>
+                                    </div>
+                                    
+                                
+    
+                                <div class="col-lg-4">
+                                    <label for="dni">DNI:</label>
+                                    <input type="text"  class="form-control" id="dni"  name="dni" maxlength="8"  [(ngModel)] = "Clientes.dni"   placeholder="Ingrese DNI"  #validadni="ngModel" required pattern="[0-9]{8}"/>
+
+                                    <div *ngIf="validadni.invalid && (validadni.dirty || validadni.touched)" class="alert alert-danger">
+                                        <div *ngIf="validadni.errors?.['required']">
+                                            DNI es obligatorio
+                                        </div>  
+                                        <div *ngIf="validadni.errors?.['pattern']">
+                                            DNI es de 8 dígitos
+                                         </div>    
+                                   </div> 
+                                </div>
+                                <br>
+
+                                 <div class="col-lg-4">
+                                        <label for="correo">Correo:</label>
+                                        <input type="email"  class="form-control" id="correo"  name="correo"  [(ngModel)] = "Clientes.correo"  placeholder="ejemplo@gmail.com" #validacorreo="ngModel" required pattern="[a-zA-Z0-9!#$%&'*_+-]([\.]?[a-zA-Z0-9!#$%&'*_+-])+@[a-zA-Z0-9]([^@&%$\/()=?¿!.,:;]|\d)+[a-zA-Z0-9][\.][a-zA-Z]{2,4}([\.][a-zA-Z]{2})?"/>
+
+                                        <div *ngIf="validacorreo.invalid && (validacorreo.dirty || validacorreo.touched)" class="alert alert-danger">
+                                            <div *ngIf="validacorreo.errors?.['required']">
+                                                El Correo es obligatorio
+                                            </div>   
+                                            <div *ngIf="validacorreo.errors?.['pattern']">
+                                                Formato de correo no valido
+                                            </div> 
+                                         </div>   
+                                    </div>
+                                    <br>
+                                   
+                
+                                    <div class="col-lg-4">
+                                        <label for="direccion">Direccion:</label>
+                                        <input type="text"  class="form-control" id="direccion"  name="direccion"  [(ngModel)] = "Clientes.direccion"  placeholder="Ingrese Direccion" #validadireccion="ngModel" required pattern="[A-Za-z-0-99999999]{5,30}"/>
+
+                                        <div *ngIf="validadireccion.invalid && (validadireccion.dirty || validadireccion.touched)" class="alert alert-danger">
+                                            <div *ngIf="validadireccion.errors?.['required']">
+                                                La direccion es obligatorio
+                                            </div>   
+                                            <div *ngIf="validadireccion.errors?.['pattern']">
+                                                 La direccion es de 5 a 30 caracteres
+                                            </div> 
+                                         </div>   
+                                    </div>
+                                    
+                                    <div class="col-lg-4">
+                                        <label for="id_reg_departamento">Departamento</label>
+                                        <select [(ngModel)]="Clientes.ubigeo!.departamento" (change)="cargaProvincia()" class="form-control"  name="departamento"   #validaDepartamento="ngModel" required>
+                                            <option value=""> [Seleccione] </option>
+                                            <option *ngFor="let aux of departamentos" value="{{ aux }}"> 
+                                                        {{ aux }}
+                                            </option>
+                                        </select>
+                                        <div *ngIf="validaDepartamento.invalid && (validaDepartamento.dirty || validaDepartamento.touched) " class="alert alert-danger">
+                                                      El Departamento es obligatorio
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4">
+                                        <label  for="id_reg_provincia">Provincia</label>
+                                        <select  [(ngModel)]="Clientes.ubigeo!.provincia" (change)="cargaDistrito()" class="form-control" name="provincia"  id="id_reg_provincia"  #validaProvincia="ngModel" required>
+                                            <option value=""> [Seleccione] </option>
+                                             <option *ngFor="let aux of  provincias" value="{{ aux }}"> 
+                                                        {{ aux }}
+                                             </option>
+                                        </select>
+                                        <div *ngIf="validaProvincia.invalid && (validaProvincia.dirty || validaProvincia.touched) " class="alert alert-danger">
+                                                    El Provincia es obligatorio
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4">
+                                        <label for="id_reg_distrito">Distrito</label>
+                                        <select [(ngModel)]="Clientes.ubigeo!.idUbigeo"   class="form-control" class="form-control" name="distrito" id="id_reg_distrito"  #validaDistrito="ngModel" pattern="[0-9]{1,9}">
+                                            <option value="-1"> [Seleccione] </option>
+                                            <option *ngFor="let aux of  distritos" value="{{ aux.idUbigeo }}"> 
+                                                {{ aux.distrito }}
+                                             </option>
+                                        </select>
+                                        <div *ngIf="validaDistrito.invalid && (validaDistrito.dirty || validaDistrito.touched) " class="alert alert-danger">
+                                                    El Distrito es obligatorio
+                                        </div>
+                                    </div>
+                                
+                                
+                                
+                                </div>
+
+                        </div> 
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btn_reg_cerrar" style="width: 100px;">Close</button>
+                            <button type="reset" class="btn btn-dark" id="btn_reg_limpiar" style="width: 100px;">Limpiar</button>
+                            <div class="form-group text-center">
+                                <div class="col-lg-12">
+                                   
+                                    <button id="id_reg_registra"  class="btn btn-primary form-control"style="width: 100px;"[disabled]="!registraForm.form.valid">Registrar</button>
+                                </div>
+                            
+                            </div>
+                        </div>
+
+               
+                    </form>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="idModalActualizar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="max-width: 80%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Actualización de Cliente</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                         <span aria-hidden="true">&times;</span>
+                     </button>
+                </div>
+                <div class="modal-body">
+
+                    <form class="content" (ngSubmit)="actualiza()"  #actualizaForm="ngForm">
+                        <div class="submit-form">
+                            <div  class="row">
+                                <div class="col-lg-4">
+                                    <label for="nombres">Nombres Completos:</label>
+                                    <input type="text" class="form-control" name="nombres" id="nombres"  [(ngModel)] = "Clientes.nombres"  placeholder=" Ingrese Nombres Completos" #validaNombre="ngModel" required pattern="[a-zA-Z ]{3,30}"/>
+
+                                    <div *ngIf="validaNombre.invalid && (validaNombre.dirty || validaNombre.touched)" class="alert alert-danger">
+                                        <div *ngIf="validaNombre.errors?.['required']">
+                                            El nombre es obligatorio
+                                        </div>   
+                                        <div *ngIf="validaNombre.errors?.['pattern']">
+                                            El nombre es de 3 a 30 caracteres
+                                        </div> 
+                                     </div>   
+                                </div>
+                                
+                                <br>
+                        
+                            
+                                <div class="col-lg-4">
+                                    <label for="apellidos">Apellidos Completos:</label>
+                                    <input type="text" class="form-control" name="apellidos" id="apellidos"  [(ngModel)] = "Clientes.apellidos"  placeholder=" Ingrese Apellidos Completos" #validaApellidos="ngModel" required pattern="[a-zA-Z ]{3,30}"/>
+
+                                    <div *ngIf="validaApellidos.invalid && (validaApellidos.dirty || validaApellidos.touched)" class="alert alert-danger">
+                                        <div *ngIf="validaNombre.errors?.['required']">
+                                            Los apellidos son obligatorios
+                                        </div>   
+                                        <div *ngIf="validaApellidos.errors?.['pattern']">
+                                            Los apellidos son de 3 a 30 caracteres
+                                        </div> 
+                                     </div>   
+                                </div>
+                                <br>
+                            
+                
+                                <div class="col-lg-4">
+                                        <label for="fechaNacimiento">Fecha Nacimiento:</label>
+                                        <input type="date" class="form-control" name="fechaNacimiento" id="fechaNacimiento"  [(ngModel)] = "Clientes.fechaNacimiento" #validaFecha="ngModel" pattern="^(19|20)(((([02468][048])|([13579][26]))-02-29)|(\d{2})-((02-((0[1-9])|1\d|2[0-8]))|((((0[13456789])|1[012]))-((0[1-9])|((1|2)\d)|30))|(((0[13578])|(1[02]))-31)))$"   />
+                                        <div *ngIf="validaFecha.invalid && (validaFecha.dirty || validaFecha.touched) " class="alert alert-danger">
+                                            La fecha es obligatoria
+                                         </div>
+                                    </div>
+                                    
+                                
+    
+                                <div class="col-lg-4">
+                                    <label for="dni">DNI:</label>
+                                    <input type="text"  class="form-control" id="dni"  name="dni" maxlength="8"  [(ngModel)] = "Clientes.dni"   placeholder="Ingrese DNI"  #validadni="ngModel" required pattern="[0-9]{8}"/>
+
+                                    <div *ngIf="validadni.invalid && (validadni.dirty || validadni.touched)" class="alert alert-danger">
+                                        <div *ngIf="validadni.errors?.['required']">
+                                            DNI es obligatorio
+                                        </div>  
+                                        <div *ngIf="validadni.errors?.['pattern']">
+                                            DNI es de 8 dígitos
+                                         </div>    
+                                   </div> 
+                                </div>
+                                <br>
+
+                                 <div class="col-lg-4">
+                                        <label for="correo">Correo:</label>
+                                        <input type="email"  class="form-control" id="correo"  name="correo"  [(ngModel)] = "Clientes.correo"  placeholder="ejemplo@gmail.com" #validacorreo="ngModel" required pattern="[a-zA-Z0-9!#$%&'*_+-]([\.]?[a-zA-Z0-9!#$%&'*_+-])+@[a-zA-Z0-9]([^@&%$\/()=?¿!.,:;]|\d)+[a-zA-Z0-9][\.][a-zA-Z]{2,4}([\.][a-zA-Z]{2})?"/>
+
+                                        <div *ngIf="validacorreo.invalid && (validacorreo.dirty || validacorreo.touched)" class="alert alert-danger">
+                                            <div *ngIf="validacorreo.errors?.['required']">
+                                                El Correo es obligatorio
+                                            </div>   
+                                            <div *ngIf="validacorreo.errors?.['pattern']">
+                                                Formato de correo no valido
+                                            </div> 
+                                         </div>   
+                                    </div>
+                                    <br>
+                                   
+                
+                                    <div class="col-lg-4">
+                                        <label for="direccion">Direccion:</label>
+                                        <input type="text"  class="form-control" id="direccion"  name="direccion"  [(ngModel)] = "Clientes.direccion"  placeholder="Ingrese Direccion" #validadireccion="ngModel" required pattern="[A-Za-z-0-99999999]{5,30}"/>
+
+                                        <div *ngIf="validadireccion.invalid && (validadireccion.dirty || validadireccion.touched)" class="alert alert-danger">
+                                            <div *ngIf="validadireccion.errors?.['required']">
+                                                La direccion es obligatorio
+                                            </div>   
+                                            <div *ngIf="validadireccion.errors?.['pattern']">
+                                                 La direccion es de 5 a 30 caracteres
+                                            </div> 
+                                         </div>   
+                                    </div>
+                                    
+                                        <div class="col-lg-4">
+                                            <label for="id_reg_departamento">Departamento</label>
+                                            <select [(ngModel)]="Clientes.ubigeo!.departamento" (change)="cargaProvincia()" class="form-control"  name="departamento"   #validaDepartamento="ngModel" required>
+                                                <option value=""> [Seleccione] </option>
+                                                <option *ngFor="let aux of departamentos" value="{{ aux }}"> 
+                                                            {{ aux }}
+                                                </option>
+                                            </select>
+                                            <div *ngIf="validaDepartamento.invalid && (validaDepartamento.dirty || validaDepartamento.touched) " class="alert alert-danger">
+                                                          El Departamento es obligatorio
+                                            </div>
+                                        </div>
+    
+                                        <div class="col-lg-4">
+                                            <label  for="id_reg_provincia">Provincia</label>
+                                            <select  [(ngModel)]="Clientes.ubigeo!.provincia" (change)="cargaDistrito()" class="form-control" name="provincia"  id="id_reg_provincia"  #validaProvincia="ngModel" required>
+                                                <option value=""> [Seleccione] </option>
+                                                 <option *ngFor="let aux of  provincias" value="{{ aux }}"> 
+                                                            {{ aux }}
+                                                 </option>
+                                            </select>
+                                            <div *ngIf="validaProvincia.invalid && (validaProvincia.dirty || validaProvincia.touched) " class="alert alert-danger">
+                                                        El Provincia es obligatorio
+                                            </div>
+                                        </div>
+    
+                                        <div class="col-lg-4">
+                                            <label for="id_reg_distrito">Distrito</label>
+                                            <select [(ngModel)]="Clientes.ubigeo!.idUbigeo"   class="form-control" class="form-control" name="distrito" id="id_reg_distrito"  #validaDistrito="ngModel" pattern="[0-9]{1,9}">
+                                                <option value="-1"> [Seleccione] </option>
+                                                <option *ngFor="let aux of  distritos" value="{{ aux.idUbigeo }}"> 
+                                                    {{ aux.distrito }}
+                                                 </option>
+                                            </select>
+                                            <div *ngIf="validaDistrito.invalid && (validaDistrito.dirty || validaDistrito.touched) " class="alert alert-danger">
+                                                        El Distrito es obligatorio
+                                            </div>
+                                        </div>
+                                    
+                                    
+                                    
+                                    </div>
+    
+                            </div> 
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-dark" data-dismiss="modal" id="btn_act_cerrar">Close</button>
+                            <button type="reset" class="btn btn-dark" id="btn_reg_limpiar" style="width: 100px;">Limpiar</button>
+              
+                            <div class="form-group text-center">
+                                <div class="col-lg-12">
+                                    <button id="id_act_actualiza" class="btn btn-success form-control"[disabled]="!actualizaForm.form.valid">Actualizar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+
+
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
