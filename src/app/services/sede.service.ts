@@ -24,4 +24,25 @@ export class SedeService {
   }
 
 
+
+  /*==========================================CRUD SEDE========================================== */
+
+
+  listaSedeLike(filtro:string):Observable<Sede[]> {
+    return this.http.get<Sede[]>(baseUrlSede + "/listaSedePorNombreLike/"+ filtro);
+}  
+
+registraSede(obj: Sede): Observable<any>{
+    return this.http.post(baseUrlSede+ "/registraSede", obj);
+}
+
+actualizaSede(obj: Sede): Observable<any>{
+  return this.http.put(baseUrlSede + "/actualizaSede", obj);
+}
+
+eliminaSede(id: any): Observable<any>{
+  return this.http.delete(baseUrlSede + "/eliminaSede/" + id);
+
+
+}
 }
