@@ -8,7 +8,7 @@
         <div class="row" style="height: 80px">
             <div class="col-md-4">
                 <input [(ngModel)]="filtro" class="form-control" id="id_txt_filtro" name="filtro"
-                    placeholder="Ingrese el nombre" type="text" maxlength="30" />
+                    placeholder="Ingrese la descripcion" type="text" maxlength="30" />
             </div>
             <div class="col-md-2">
                 <button type="button" class="btn btn-dark" id="id_btn_filtrar" style="width: 70px"
@@ -119,34 +119,25 @@
                             <br>
 
 
-                            <div class="col-lg-3">
+                            <div class="col-lg-4">
                                 <label for="cliente ID">cliente ID</label>
-                                <select id="cliente ID" name="cliente ID" class="form-control"
-                                [(ngModel)]="reclamos.cliente!.idCliente" #validaCliente="ngModel" required>
-                                    <option value="-1"> [Seleccione] </option>
+                                <select [(ngModel)]="reclamos.cliente!.idCliente" class="form-control"  name="cliente ID"   #validaCliente="ngModel" required>
+                                    <option value=""> [Seleccione] </option>
                                     <option *ngFor="let aux of Cliente" value="{{ aux.idCliente }}">
 
                                         {{ aux.nombres }}
 
                                     </option>
-
                                 </select>
                                 <div *ngIf="validaCliente.invalid && (validaCliente.dirty || validaCliente.touched) " class="alert alert-danger">
-                                    El Departamento es obligatorio
+                                    El Cliente es obligatorio
                                 </div>
                             </div>
 
-
-
-                            <br>
-
-
-
-                            <div class="col-lg-3">
+                            <div class="col-lg-4">
                                 <label for="tipoReclamo">tipoReclamo</label>
-                                <select id="tipoReclamo" name="tipoReclamo" class="form-control"
-                                    [(ngModel)]="reclamos.tipoReclamo!.idTipoReclamo" #validaReclamo="ngModel" required>
-                                    <option value="-1"> [Seleccione] </option>
+                                <select [(ngModel)]="reclamos.cliente!.idCliente" class="form-control"  name="tipoReclamo"   #validaReclamo="ngModel" required>
+                                    <option value=""> [Seleccione] </option>
                                     <option *ngFor="let aux of TipoReclamo" value="{{ aux.idTipoReclamo }}">
 
                                         {{ aux.descripcion }}
@@ -154,13 +145,11 @@
                                     </option>
 
                                 </select>
-
+                                
                                 <div *ngIf="validaReclamo.invalid && (validaReclamo.dirty || validaReclamo.touched) " class="alert alert-danger">
-                                    El Departamento es obligatorio
+                                    El Reclamo es obligatorio
                                 </div>
                             </div>
-
-
 
 
                         </div>
