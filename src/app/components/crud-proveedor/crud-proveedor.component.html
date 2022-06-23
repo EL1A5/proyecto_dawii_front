@@ -1,1 +1,416 @@
-<p>crud-proveedor works!</p>
+<div class="container" >
+    <h5>Crud de Proveedor</h5>
+
+    <div class="col-md-23" style="margin-top: 3%">
+
+
+        <div class="row" style="height: 80px">
+            <div class="col-md-4">
+                <input [(ngModel)] = "filtro"  class="form-control"  id="id_txt_filtro" name="filtro" placeholder="Ingrese el nombre" type="text" maxlength="30" />
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-dark" id="id_btn_filtrar" style="width: 70px" (click)="consulta()">Filtrar</button>
+            </div>
+            <div class="col-md-2">
+                <button  type="button" data-toggle='modal' data-target="#idModalRegistrar" class='btn btn-success' style="width: 150px">Registrar</button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="content">
+
+                    <table id="id_table" class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Razón Social</th>
+                                <th>Ruc</th>
+                                <th>Dirección</th>
+                                <th>Teléfono</th>
+                                <th>Celular</th>
+                                <th>Contacto</th>
+                                <th>FechaRegistro</th>
+                                <th>Ubigeo</th>
+                                <th>Estado</th>
+                                <th style="width: 7%"></th>
+                                <th style="width: 7%"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let aux of proveedores">
+                                <td>{{ aux.idProveedor }}</td>   
+                                <td>{{ aux.razonsocial }}</td>   
+                                <td>{{ aux.ruc }}</td>   
+                                <td>{{ aux.direccion }}</td>   
+                                <td>{{ aux.telefono }}</td>   
+                                <td>{{ aux.celular }}</td>   
+                                <td>{{ aux.contacto }}</td>  
+                                <td>{{ aux.fechaRegistro }}</td>  
+                                <td>{{ aux.ubigeo?.departamento }} - {{ aux.ubigeo?.provincia }} - {{ aux.ubigeo?.distrito }}</td>   
+                                <td>{{ aux.estado==1?'Activo':'Inactivo' }}</td>
+                                <td>
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="idEstado_{{ aux.idProveedor }}" [checked]="aux.estado==1?true:false" name="estado" (change)="actualizaEstado(aux)" />         
+                                        <label class="custom-control-label" for="idEstado_{{ aux.idProveedor }}"></label>
+                                    </div>    
+                                </td>
+                                <td><button type="button" style="width: 90px" class="btn btn-warning btn-sm"  data-toggle="modal" data-target="#idModalActualizar" (click)="buscar(aux)" >Editar</button></td>
+                                <td><button type="button" style="width: 90px" class="btn btn-danger btn-sm"  (click)="elimina(aux)" >Eliminar</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade"  id="idModalRegistrar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+        <div class="modal-dialog" style="max-width: 70%;">
+            <div class="modal-content" >
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Registro de Proveedores</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                
+                <div class="modal-body">
+                    <form class="content"  (ngSubmit)="registra()" #registraForm="ngForm">
+                        <div class="submit-form">
+                            <div  class="row">
+                                <div class="col-lg-4">
+                                    <label for="nombres">RAZÓN SOCIAL:</label>
+                                    <input type="text" class="form-control" name="razonsocial" id="razonsocial"  [(ngModel)] = "proveedor.razonsocial"  placeholder=" Ingrese Razón Social" #validarazon="ngModel" required pattern="[a-zA-Z ]{3,30}"/>
+
+                                    <div *ngIf="validarazon.invalid && (validarazon.dirty || validarazon.touched)" class="alert alert-danger">
+                                        <div *ngIf="validarazon.errors?.['required']">
+                                            La Razón Social es obligatorio
+                                        </div>   
+                                        <div *ngIf="validarazon.errors?.['pattern']">
+                                            La Razón Social es de 3 a 30 caracteres
+                                        </div> 
+                                     </div>   
+                                </div>
+                                
+                                <br>
+                        
+                            
+                                <div class="col-lg-4">
+                                    <label for="apellidos">RUC:</label>
+                                    <input type="text" class="form-control" name="ruc" id="ruc" maxlength="11"  [(ngModel)] = "proveedor.ruc"  placeholder=" Ingrese RUC" #validaruc="ngModel" required pattern="[0-9]{11}"/>
+
+                                    <div *ngIf="validaruc.invalid && (validaruc.dirty || validaruc.touched)" class="alert alert-danger">
+                                        <div *ngIf="validaruc.errors?.['required']">
+                                            El RUC es obligatorio
+                                        </div>   
+                                        <div *ngIf="validaruc.errors?.['pattern']">
+                                            El RUC es de 11 caracteres
+                                        </div> 
+                                     </div>   
+                                </div>
+                                <br>
+                            
+                
+                                <div class="col-lg-4">
+                                    <label for="apellidos">DIRECCIÓN:</label>
+                                    <input type="text" class="form-control" name="direccion" id="direccion"  [(ngModel)] = "proveedor.direccion"  placeholder=" Ingrese Dirección" #validadireccion="ngModel" required pattern="[A-Za-z-0-99999999 ]{5,45}"/>
+
+                                    <div *ngIf="validadireccion.invalid && (validadireccion.dirty || validadireccion.touched)" class="alert alert-danger">
+                                        <div *ngIf="validadireccion.errors?.['required']">
+                                            La dirección es obligatorio
+                                        </div>   
+                                        <div *ngIf="validadireccion.errors?.['pattern']">
+                                            La dirección son de 5 a 45 caracteres
+                                        </div> 
+                                     </div>    
+                                </div>
+                                    
+                                
+    
+                                <div class="col-lg-4">
+                                    <label for="dni">TELÉFONO:</label>
+                                    <input type="text"  class="form-control" id="telefono"  name="telefono" maxlength="10"  [(ngModel)] = "proveedor.telefono"   placeholder="Ingrese Teléfono"  #validatelefono="ngModel" required pattern="[0-9]{10}"/>
+
+                                    <div *ngIf="validatelefono.invalid && (validatelefono.dirty || validatelefono.touched)" class="alert alert-danger">
+                                        <div *ngIf="validatelefono.errors?.['required']">
+                                            Teléfono es obligatorio
+                                        </div>  
+                                        <div *ngIf="validatelefono.errors?.['pattern']">
+                                            Teléfono es de 10 dígitos
+                                         </div>    
+                                   </div> 
+                                </div>
+                                <br>
+
+                                 <div class="col-lg-4">
+                                    <label for="dni">CELULAR:</label>
+                                    <input type="text"  class="form-control" id="celular"  name="celular" maxlength="9"  [(ngModel)] = "proveedor.celular"   placeholder="Ingrese Celular"  #validacelular="ngModel" required pattern="[0-9]{9}"/>
+
+                                    <div *ngIf="validacelular.invalid && (validacelular.dirty || validacelular.touched)" class="alert alert-danger">
+                                        <div *ngIf="validacelular.errors?.['required']">
+                                            Celular es obligatorio
+                                        </div>  
+                                        <div *ngIf="validacelular.errors?.['pattern']">
+                                            Celular es de 9 dígitos
+                                         </div>    
+                                   </div>    
+
+                                </div>
+                                    <br>
+                                   
+                
+                                    <div class="col-lg-4">
+                                        <label for="direccion">CONTACTO:</label>
+                                        <input type="text"  class="form-control" id="contacto"  name="contacto"  [(ngModel)] = "proveedor.contacto"  placeholder="Ingrese Contacto" #validacontacto="ngModel" required pattern="[A-Za-z-0-99999999 ]{5,30}"/>
+
+                                        <div *ngIf="validacontacto.invalid && (validacontacto.dirty || validacontacto.touched)" class="alert alert-danger">
+                                            <div *ngIf="validacontacto.errors?.['required']">
+                                                El contacto es obligatorio
+                                            </div>   
+                                            <div *ngIf="validacontacto.errors?.['pattern']">
+                                                El contacto es de 5 a 30 caracteres
+                                            </div> 
+                                         </div>   
+                                    </div>
+                                    
+                                    <div class="col-lg-4">
+                                        <label for="id_reg_departamento">Departamento</label>
+                                        <select [(ngModel)]="proveedor.ubigeo!.departamento" (change)="cargaProvincia()" class="form-control"  name="departamento"   #validaDepartamento="ngModel" required>
+                                            <option value=""> [Seleccione] </option>
+                                            <option *ngFor="let aux of departamentos" value="{{ aux }}"> 
+                                                        {{ aux }}
+                                            </option>
+                                        </select>
+                                        <div *ngIf="validaDepartamento.invalid && (validaDepartamento.dirty || validaDepartamento.touched) " class="alert alert-danger">
+                                                      El Departamento es obligatorio
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4">
+                                        <label  for="id_reg_provincia">Provincia</label>
+                                        <select  [(ngModel)]="proveedor.ubigeo!.provincia" (change)="cargaDistrito()" class="form-control" name="provincia"  id="id_reg_provincia"  #validaProvincia="ngModel" required>
+                                            <option value=""> [Seleccione] </option>
+                                             <option *ngFor="let aux of  provincias" value="{{ aux }}"> 
+                                                        {{ aux }}
+                                             </option>
+                                        </select>
+                                        <div *ngIf="validaProvincia.invalid && (validaProvincia.dirty || validaProvincia.touched) " class="alert alert-danger">
+                                                    El Provincia es obligatorio
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4">
+                                        <label for="id_reg_distrito">Distrito</label>
+                                        <select [(ngModel)]="proveedor.ubigeo!.idUbigeo"   class="form-control" class="form-control" name="distrito" id="id_reg_distrito"  #validaDistrito="ngModel" pattern="[0-9]{1,9}">
+                                            <option value="-1"> [Seleccione] </option>
+                                            <option *ngFor="let aux of  distritos" value="{{ aux.idUbigeo }}"> 
+                                                {{ aux.distrito }}
+                                             </option>
+                                        </select>
+                                        <div *ngIf="validaDistrito.invalid && (validaDistrito.dirty || validaDistrito.touched) " class="alert alert-danger">
+                                                    El Distrito es obligatorio
+                                        </div>
+                                    </div>
+                                
+                                
+                                
+                                </div>
+
+                        </div> 
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btn_reg_cerrar" style="width: 100px;">Close</button>
+                            <button type="reset" class="btn btn-dark" id="btn_reg_limpiar" style="width: 100px;">Limpiar</button>
+                            <div class="form-group text-center">
+                                <div class="col-lg-12">
+                                   
+                                    <button id="id_reg_registra"  class="btn btn-primary form-control"style="width: 100px;"[disabled]="!registraForm.form.valid">Registrar</button>
+                                </div>
+                            
+                            </div>
+                        </div>
+
+               
+                    </form>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="idModalActualizar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="max-width: 80%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Actualización de Cliente</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                         <span aria-hidden="true">&times;</span>
+                     </button>
+                </div>
+                <div class="modal-body">
+
+                    <form class="content" (ngSubmit)="actualiza()"  #actualizaForm="ngForm">
+                        <div class="submit-form">
+                            <div  class="row">
+                                <div class="col-lg-4">
+                                    <label for="nombres">RAZÓN SOCIAL:</label>
+                                    <input type="text" class="form-control" name="razonsocial" id="razonsocial"  [(ngModel)] = "proveedor.razonsocial"  placeholder=" Ingrese Razón Social" #validarazon="ngModel" required pattern="[a-zA-Z ]{3,30}"/>
+
+                                    <div *ngIf="validarazon.invalid && (validarazon.dirty || validarazon.touched)" class="alert alert-danger">
+                                        <div *ngIf="validarazon.errors?.['required']">
+                                            La Razón Social es obligatorio
+                                        </div>   
+                                        <div *ngIf="validarazon.errors?.['pattern']">
+                                            La Razón Social de 3 a 30 caracteres
+                                        </div> 
+                                     </div>   
+                                </div>
+                                
+                                <br>
+                        
+                            
+                                <div class="col-lg-4">
+                                    <label for="apellidos">RUC:</label>
+                                    <input type="text" class="form-control" name="ruc" id="ruc"   maxlength="11" [(ngModel)] = "proveedor.ruc"  placeholder=" Ingrese RUC" #validaruc="ngModel" required pattern="[0-9]{11}"/>
+                                    <div *ngIf="validaruc.invalid && (validaruc.dirty || validaruc.touched)" class="alert alert-danger">
+                                        <div *ngIf="validaruc.errors?.['required']">
+                                            El ruc es obligatorio
+                                        </div>   
+                                        <div *ngIf="validaruc.errors?.['pattern']">
+                                            El ruc es de 11 dígitos
+                                        </div> 
+                                     </div>   
+                                </div>
+                                <br>
+                            
+                
+                                <div class="col-lg-4">
+                                    <label for="apellidos">DIRECCIÓN:</label>
+                                    <input type="text" class="form-control" name="direccion" id="direccion"  [(ngModel)] = "proveedor.direccion"  placeholder=" Ingrese Dirección" #validadireccion="ngModel" required pattern="[A-Za-z ]{5,30}"/>
+                                    <div *ngIf="validadireccion.invalid && (validadireccion.dirty || validadireccion.touched)" class="alert alert-danger">
+                                        <div *ngIf="validadireccion.errors?.['required']">
+                                            La Dirección es obligatorio
+                                        </div>   
+                                        <div *ngIf="validadireccion.errors?.['pattern']">
+                                            La Dirección son de 5 a 30 caracteres
+                                        </div> 
+                                     </div>  
+                                </div>
+                                    
+                                
+    
+                                <div class="col-lg-4">
+                                    <label for="dni">TELÉFONO:</label>
+                                    <input type="text"  class="form-control" id="telefono"  name="telefono" maxlength="8"  [(ngModel)] = "proveedor.telefono"   placeholder="Ingrese Teléfono"  #validatelefono="ngModel" required pattern="[0-9]{10}"/>
+
+                                    <div *ngIf="validatelefono.invalid && (validatelefono.dirty || validatelefono.touched)" class="alert alert-danger">
+                                        <div *ngIf="validatelefono.errors?.['required']">
+                                            Teléfono es obligatorio
+                                        </div>  
+                                        <div *ngIf="validatelefono.errors?.['pattern']">
+                                            Teléfono es de 10 dígitos
+                                         </div>    
+                                   </div> 
+                                </div>
+                                <br>
+
+                                <div class="col-lg-4">
+                                    <label for="dni">CELULAR:</label>
+                                    <input type="text"  class="form-control" id="celular"  name="celular" maxlength="8"  [(ngModel)] = "proveedor.celular"   placeholder="Ingrese Celular"  #validacelular="ngModel" required pattern="[0-9]{9}"/>
+
+                                    <div *ngIf="validacelular.invalid && (validacelular.dirty || validacelular.touched)" class="alert alert-danger">
+                                        <div *ngIf="validacelular.errors?.['required']">
+                                            Celular es obligatorio
+                                        </div>  
+                                        <div *ngIf="validacelular.errors?.['pattern']">
+                                            Celular es de 9 dígitos
+                                         </div>    
+                                   </div> 
+                                </div>
+                                <br>
+                                   
+                
+                                    <div class="col-lg-4">
+                                        <label for="direccion">CONTACTO:</label>
+                                        <input type="text"  class="form-control" id="contacto"  name="contacto"  [(ngModel)] = "proveedor.contacto"  placeholder="Ingrese Contacto" #validacontacto="ngModel" required pattern="[A-Za-z ]{5,30}"/>
+
+                                        <div *ngIf="validacontacto.invalid && (validacontacto.dirty || validacontacto.touched)" class="alert alert-danger">
+                                            <div *ngIf="validacontacto.errors?.['required']">
+                                                El contacto es obligatorio
+                                            </div>   
+                                            <div *ngIf="validacontacto.errors?.['pattern']">
+                                                 El contacto es de 5 a 30 caracteres
+                                            </div> 
+                                         </div>   
+                                    </div>
+                                    
+                                        <div class="col-lg-4">
+                                            <label for="id_reg_departamento">Departamento</label>
+                                            <select [(ngModel)]="proveedor.ubigeo!.departamento" (change)="cargaProvincia()" class="form-control"  name="departamento"   #validaDepartamento="ngModel" required>
+                                                <option value=""> [Seleccione] </option>
+                                                <option *ngFor="let aux of departamentos" value="{{ aux }}"> 
+                                                            {{ aux }}
+                                                </option>
+                                            </select>
+                                            <div *ngIf="validaDepartamento.invalid && (validaDepartamento.dirty || validaDepartamento.touched) " class="alert alert-danger">
+                                                          El Departamento es obligatorio
+                                            </div>
+                                        </div>
+    
+                                        <div class="col-lg-4">
+                                            <label  for="id_reg_provincia">Provincia</label>
+                                            <select  [(ngModel)]="proveedor.ubigeo!.provincia" (change)="cargaDistrito()" class="form-control" name="provincia"  id="id_reg_provincia"  #validaProvincia="ngModel" required>
+                                                <option value=""> [Seleccione] </option>
+                                                 <option *ngFor="let aux of  provincias" value="{{ aux }}"> 
+                                                            {{ aux }}
+                                                 </option>
+                                            </select>
+                                            <div *ngIf="validaProvincia.invalid && (validaProvincia.dirty || validaProvincia.touched) " class="alert alert-danger">
+                                                        El Provincia es obligatorio
+                                            </div>
+                                        </div>
+    
+                                        <div class="col-lg-4">
+                                            <label for="id_reg_distrito">Distrito</label>
+                                            <select [(ngModel)]="proveedor.ubigeo!.idUbigeo"   class="form-control" class="form-control" name="distrito" id="id_reg_distrito"  #validaDistrito="ngModel" pattern="[0-9]{1,9}">
+                                                <option value="-1"> [Seleccione] </option>
+                                                <option *ngFor="let aux of  distritos" value="{{ aux.idUbigeo }}"> 
+                                                    {{ aux.distrito }}
+                                                 </option>
+                                            </select>
+                                            <div *ngIf="validaDistrito.invalid && (validaDistrito.dirty || validaDistrito.touched) " class="alert alert-danger">
+                                                        El Distrito es obligatorio
+                                            </div>
+                                        </div>
+                                    
+                                    </div>
+    
+                            </div> 
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-dark" data-dismiss="modal" id="btn_act_cerrar">Close</button>
+                            <button type="reset" class="btn btn-dark" id="btn_reg_limpiar" style="width: 100px;">Limpiar</button>
+              
+                            <div class="form-group text-center">
+                                <div class="col-lg-12">
+                                    <!--
+                                    <button id="id_act_actualiza" class="btn btn-success form-control"[disabled]="!actualizaForm.form.valid">Actualizar</button>
+                                    -->
+                                <button id="id_act_actualiza" class="btn btn-success form-control">Actualizar</button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
