@@ -136,7 +136,7 @@
 
                             <div class="col-lg-4">
                                 <label for="tipoReclamo">tipoReclamo</label>
-                                <select [(ngModel)]="reclamos.cliente!.idCliente" class="form-control"  name="tipoReclamo"   #validaReclamo="ngModel" required>
+                                <select [(ngModel)]="reclamos.tipoReclamo!.idTipoReclamo" class="form-control"  name="tipoReclamo"   #validaReclamo="ngModel" required>
                                     <option value=""> [Seleccione] </option>
                                     <option *ngFor="let aux of TipoReclamo" value="{{ aux.idTipoReclamo }}">
 
