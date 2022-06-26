@@ -67,6 +67,7 @@ export class CrudReclamoComponent implements OnInit {
         this.clienteService.listClientes(this.filtro == "" ? "todos" : this.filtro).subscribe(
           (x) => this.reclamo = x
         );
+        this.consulta()
       }
     );
 
@@ -87,6 +88,7 @@ export class CrudReclamoComponent implements OnInit {
         idTipoReclamo: 0
       }
     }
+ 
   }
 
   buscar(aux: Reclamo) {
