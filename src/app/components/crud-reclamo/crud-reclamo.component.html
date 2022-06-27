@@ -1,1 +1,271 @@
-<p>crud-reclamo works!</p>
+
+<div class="container">
+    <h5>Crud de Reclamo</h5>
+
+    <div class="col-md-23" style="margin-top: 3%">
+
+
+        <div class="row" style="height: 80px">
+            <div class="col-md-4">
+                <input [(ngModel)]="filtro" class="form-control" id="id_txt_filtro" name="filtro"
+                    placeholder="Ingrese la descripcion" type="text" maxlength="30" />
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-dark" id="id_btn_filtrar" style="width: 70px"
+                    (click)="consulta()">Filtrar</button>
+            </div>
+            <div class="col-md-2">
+                <button type="button" data-toggle='modal' data-target="#idModalRegistrar" class='btn btn-success'
+                    style="width: 150px">Registrar</button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="content">
+
+                    <table id="id_table" class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>descripcion</th>
+                                <th>fechaRegistro</th>
+                                <th>fechaCompra</th>
+                                <th>Estado</th>
+                                <th>Cliente</th>
+                                <th>TipoReclamo</th>
+                                <th style="width: 7%"></th>
+                                <th style="width: 7%"></th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let aux of reclamo">
+                                <td>{{ aux.idReclamo }}</td>
+                                <td>{{ aux.descripcion }}</td>
+                                <td>{{ aux.fechaRegistro }}</td>
+                                <td>{{ aux.fechaCompra }}</td>
+                                <td>{{ aux.estado==1?'Activo':'Inactivo' }}
+                                <td>{{ aux.cliente?.nombres }}</td>
+                                <td>{{ aux.tipoReclamo?.descripcion }}</td>
+                                <td>
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input"
+                                            id="idEstado_{{ aux.idReclamo }}" [checked]="aux.estado==1?true:false"
+                                            name="estado" (change)="actualizaEstado(aux)" />
+                                        <label class="custom-control-label" for="idEstado_{{ aux.idReclamo }}"></label>
+                                    </div>
+                                </td>
+                               <td><button type="button" style="width: 90px" class="btn btn-warning btn-sm"
+                                        data-toggle="modal" data-target="#idModalActualizar"
+                                        (click)="buscar(aux)">Editar</button></td>
+                                <td><button type="button" style="width: 90px" class="btn btn-danger btn-sm"
+                                        (click)="elimina(aux)">Eliminar</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="idModalRegistrar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+        <div class="modal-dialog" style="max-width: 70%;">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Registro de Reclamo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <form class="content" (ngSubmit)="registra()" #registraForm="ngForm">
+                        <div class="submit-form">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <label for="descripcion">descripcion</label>
+                                    <input type="text" class="form-control" name="descripcion" id="descripcion"  #validaDescripcion="ngModel" required pattern="[a-zA-Z .]{4,30}"
+                                        [(ngModel)]="reclamos.descripcion" />
+
+                                    <div *ngIf="validaDescripcion.invalid && (validaDescripcion.dirty || validaDescripcion.touched)" class="alert alert-danger">
+                                        <div *ngIf="validaDescripcion.errors?.['required']">
+                                            La descripcion es obligatoria
+                                        </div>   
+                                        <div *ngIf="validaDescripcion.errors?.['pattern']">
+                                            La descripcion es de 4 a 30 caracteres
+                                        </div> 
+                                    </div>   
+                                </div>
+                            </div>
+
+                            <br>
+
+
+                            <div class="col-lg-4">
+                                <label for="fechaCompra">fechaCompra</label>
+                                <input type="date" class="form-control" id="fechaCompra" name="fechaCompra"
+                                    maxlength="20" #validaFecha="ngModel" pattern="^(19|20)(((([02468][048])|([13579][26]))-02-29)|(\d{2})-((02-((0[1-9])|1\d|2[0-8]))|((((0[13456789])|1[012]))-((0[1-9])|((1|2)\d)|30))|(((0[13578])|(1[02]))-31)))$" 
+                                    [(ngModel)]="reclamos.fechaCompra" />
+
+                                <div *ngIf="validaFecha.invalid && (validaFecha.dirty || validaFecha.touched) " class="alert alert-danger">
+                                    La fecha es obligatoria
+                                </div>
+                            </div>
+                            <br>
+
+
+                            <div class="col-lg-4">
+                                <label for="cliente ID">cliente ID</label>
+                                <select [(ngModel)]="reclamos.cliente!.idCliente" class="form-control"  name="cliente ID"   #validaCliente="ngModel" required>
+                                    <option value=""> [Seleccione] </option>
+                                    <option *ngFor="let aux of Cliente" value="{{ aux.idCliente }}">
+
+                                        {{ aux.nombres }}
+
+                                    </option>
+                                </select>
+                                <div *ngIf="validaCliente.invalid && (validaCliente.dirty || validaCliente.touched) " class="alert alert-danger">
+                                    El Cliente es obligatorio
+                                </div>
+                            </div>
+
+                            <div class="col-lg-4">
+                                <label for="tipoReclamo">tipoReclamo</label>
+                                <select [(ngModel)]="reclamos.tipoReclamo!.idTipoReclamo" class="form-control"  name="tipoReclamo"   #validaReclamo="ngModel" required>
+                                    <option value=""> [Seleccione] </option>
+                                    <option *ngFor="let aux of TipoReclamo" value="{{ aux.idTipoReclamo }}">
+
+                                        {{ aux.descripcion }}
+
+                                    </option>
+                                </select>
+                                
+                                <div *ngIf="validaReclamo.invalid && (validaReclamo.dirty || validaReclamo.touched) " class="alert alert-danger">
+                                    El Reclamo es obligatorio
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btn_reg_cerrar"
+                                style="width: 100px;">Close</button>
+                            <button type="reset" class="btn btn-dark" id="btn_reg_limpiar"
+                                style="width: 100px;">Limpiar</button>
+                            <div class="form-group text-center">
+                                <div class="col-lg-12">
+
+                                    <button id="id_reg_registra" class="btn btn-primary form-control"
+                                        style="width: 100px;" [disabled]="!registraForm.form.valid">Registrar</button>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="idModalActualizar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="max-width: 80%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Actualización de Reclamo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <form class="content" (ngSubmit)="actualiza()" #actualizaForm="ngForm">
+                        <div class="submit-form">
+                            <div class="row">
+
+                                <div class="col-lg-6">
+                                    <label for="descripcion">descripcion</label>
+                                    <input type="text" class="form-control" name="descripcion" id="descripcion"
+                                        [(ngModel)]="reclamos.descripcion" />
+                                </div>
+
+                                <br>
+
+
+
+                                <div class="col-lg-4">
+                                    <label for="fechaCompra">fechaCompra</label>
+                                    <input type="date" class="form-control" id="fechaCompra" name="fechaCompra"
+                                        maxlength="20" [(ngModel)]="reclamos.fechaCompra" />
+                                </div>
+                                <br>
+
+
+                                <div class="col-lg-3">
+                                    <label for="cliente ID">cliente ID</label>
+                                    <select id="cliente ID" name="cliente ID" class="form-control"
+                                        [(ngModel)]="reclamos.cliente!.idCliente">
+                                        <option value="-1"> [Seleccione] </option>
+                                        <option *ngFor="let aux of Cliente" value="{{ aux.idCliente }}">
+
+                                            {{ aux.nombres }}
+
+                                        </option>
+
+                                    </select>
+                                </div>
+
+
+
+                                <br>
+
+
+
+                                <div class="col-lg-3">
+                                    <label for="tipoReclamo">tipoReclamo</label>
+                                    <select id="tipoReclamo" name="tipoReclamo" class="form-control"
+                                        [(ngModel)]="reclamos.tipoReclamo!.idTipoReclamo">
+                                        <option value="-1"> [Seleccione] </option>
+                                        <option *ngFor="let aux of TipoReclamo" value="{{ aux.idTipoReclamo }}">
+
+                                            {{ aux.descripcion }}
+
+                                        </option>
+
+                                    </select>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-dark" data-dismiss="modal"
+                                id="btn_act_cerrar">Close</button>
+                            <button type="reset" class="btn btn-dark" id="btn_reg_limpiar"
+                                style="width: 100px;">Limpiar</button>
+
+                            <div class="form-group text-center">
+                                <div class="col-lg-12">
+                                    <button id="id_act_actualiza" class="btn btn-success form-control"
+                                        [disabled]="!actualizaForm.form.valid">Actualizar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </div> 
+
+</div> 

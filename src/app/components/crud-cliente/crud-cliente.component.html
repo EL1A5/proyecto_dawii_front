@@ -31,7 +31,7 @@
                                 <th>DNI</th>
                                 <th>correo</th>
                                 <th>Fecha de Registro</th>
-                                <th>Direccion</th>
+                                <th>Dirección</th>
                                 <th>Ubigeo</th>
                                 <th>Estado</th>
                                 <th style="width: 7%"></th>
@@ -160,15 +160,15 @@
                                    
                 
                                     <div class="col-lg-4">
-                                        <label for="direccion">Direccion:</label>
+                                        <label for="direccion">Dirección:</label>
                                         <input type="text"  class="form-control" id="direccion"  name="direccion"  [(ngModel)] = "Clientes.direccion"  placeholder="Ingrese Direccion" #validadireccion="ngModel" required pattern="[A-Za-z-0-99999999]{5,30}"/>
 
                                         <div *ngIf="validadireccion.invalid && (validadireccion.dirty || validadireccion.touched)" class="alert alert-danger">
                                             <div *ngIf="validadireccion.errors?.['required']">
-                                                La direccion es obligatorio
+                                                La Dirección es obligatorio
                                             </div>   
                                             <div *ngIf="validadireccion.errors?.['pattern']">
-                                                 La direccion es de 5 a 30 caracteres
+                                                 La Dirección es de 5 a 30 caracteres
                                             </div> 
                                          </div>   
                                     </div>
@@ -328,15 +328,15 @@
                                    
                 
                                     <div class="col-lg-4">
-                                        <label for="direccion">Direccion:</label>
+                                        <label for="direccion">Dirección:</label>
                                         <input type="text"  class="form-control" id="direccion"  name="direccion"  [(ngModel)] = "Clientes.direccion"  placeholder="Ingrese Direccion" #validadireccion="ngModel" required pattern="[A-Za-z-0-99999999]{5,30}"/>
 
                                         <div *ngIf="validadireccion.invalid && (validadireccion.dirty || validadireccion.touched)" class="alert alert-danger">
                                             <div *ngIf="validadireccion.errors?.['required']">
-                                                La direccion es obligatorio
+                                                La Dirección es obligatoria
                                             </div>   
                                             <div *ngIf="validadireccion.errors?.['pattern']">
-                                                 La direccion es de 5 a 30 caracteres
+                                                 La Dirección es de 5 a 30 caracteres
                                             </div> 
                                          </div>   
                                     </div>

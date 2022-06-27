@@ -28,8 +28,16 @@ export class ProveedorService {
     return this.http.get<any>(baseUrlProveedor+"/listaProveedorConParametros", {params});
   }
 
+  listaProveedorFiltro(filtro: string): Observable<Proveedor[]>{
+    return this.http.get<Proveedor[]>(baseUrlProveedor + "/listaProveedorPorRazonSocial/" + filtro);
+  }
 
+  actualizaProveedor(obj : Proveedor): Observable<any> {
+    return this.http.put(baseUrlProveedor + "/actualizaProveedor", obj);
+  }
 
+  eliminarProveedor(id: any): Observable<any>{
+    return this.http.delete(baseUrlProveedor + "/eliminaProveedor/"+ id);
+  }
 
-  
 }
