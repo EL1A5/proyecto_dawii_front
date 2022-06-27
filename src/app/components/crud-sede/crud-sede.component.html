@@ -25,13 +25,14 @@
                         <thead>
                             <tr>
                                 <th style="width: 5%">#</th>
-                                <th style="width: 30%">Nombre</th>
-                                <th style="width: 31%">Direccion</th>
+                                <th style="width: 20%">Nombre</th>
+                                <th style="width: 21%">Dirección</th>
+                                <th style="width: 10%">País</th>
+                                <th style="width: 10%">Código Postal</th>    
+                                <th style="width: 10%">Fecha Creación</th>
                                 <th style="width: 10%">Estado</th>
-                                <th style="width: 10%">Pais</th>
                                 <th style="width: 7%"></th>
                                 <th style="width: 7%"></th>
-
                             </tr>
                         </thead>
                         <tbody>
@@ -39,8 +40,10 @@
                                <td>{{ aux.idSede }}</td>
                                 <td>{{ aux.nombre }}</td>
                                 <td>{{ aux.direccion }}</td>
-                                <td>{{ aux.estado == 1 ? "Activo" : "Inactivo"}}</td>
                                 <td>{{ aux.pais!.nombre}}</td>
+                                <td>{{ aux.codigoPostal }}</td>
+                                <td>{{ aux.fechaCreacion }}</td>   
+                                <td>{{ aux.estado == 1 ? "Activo" : "Inactivo"}}</td>
                                 <td>
                                     <div class="custom-control custom-switch">
                                         <input type="checkbox" class="custom-control-input" id="idEstado_{{ aux.idSede }}" [checked]="aux.estado==1?true:false" name="estado" (change)="actualizaEstado(aux)" />         
@@ -118,6 +121,29 @@
                                          </div>
                                     </div>
 
+                                    <div class="col-lg-4">
+                                        <label for="id_reg_dni">Codigo Postal</label>
+                                        <input formControlName="validaCodigo" [(ngModel)]="sede.codigoPostal" type="text" placeholder="Ingrese Codigo Postal" class="form-control" name="codigoPostal" id="id_reg_dni"  maxlength="5"/>
+                                        <div *ngIf="submitted && formsRegistra.controls['validaCodigo'].errors" class="invalid">
+                                            <ul>
+                                                <li class="text-danger">El codigo postal es obligatorio</li>    
+                                                <li class="text-danger">El codigo postal es de 5 dígitos</li>    
+                                            </ul>
+                                         </div>
+                                    </div>
+
+                                    <div class="col-lg-4">
+                                        <label for="fechaCreacion">Fecha Creacion</label>
+                                        <input formControlName="validaFecha" [(ngModel)]="sede!.fechaCreacion"  pattern="^(19|20)(((([02468][048])|([13579][26]))-02-29)|(\d{2})-((02-((0[1-9])|1\d|2[0-8]))|((((0[13456789])|1[012]))-((0[1-9])|((1|2)\d)|30))|(((0[13578])|(1[02]))-31)))$"
+                                         type="date"  class="form-control" id="id_fecha_Creacion"  name="fechaCreacion"  />
+                                        <div *ngIf="submitted && formsRegistra.controls['validaFecha'].errors" class="invalid">
+                                            <ul>
+                                                <li class="text-danger">La fecha es obligatoria</li>    
+                                                   
+                                            </ul>
+                                         </div>
+                                    </div>
+
                                    
                                 
                                 
@@ -185,7 +211,7 @@
 
                                 <div class="col-lg-5">
                                     <label for="id_act_dni">Direccion</label>
-                                    <input formControlName="validaDireccion" [(ngModel)]="sede.direccion"  type="text" placeholder="Ingrese DNI" class="form-control" name="dni" id="id_act_dni"  maxlength="50"/>
+                                    <input formControlName="validaDireccion" [(ngModel)]="sede.direccion"  type="text" placeholder="Ingrese Direccion" class="form-control" name="dni" id="id_act_dni"  maxlength="50"/>
                                     <div *ngIf="submitted && formsActualiza.controls['validaDireccion'].errors" class="invalid">
                                         <ul>
                                             <li class="text-danger">La direccion obligatoria</li>      
@@ -209,7 +235,27 @@
                                  </div>
                             </div>
     
-                                
+                            <div class="col-lg-4">
+                                <label for="id_reg_dni">Codigo Postal</label>
+                                <input formControlName="validaCodigo" [(ngModel)]="sede.codigoPostal" type="text" placeholder="Ingrese Codigo Postal" class="form-control" name="dni" id="id_reg_dni"  maxlength="5"/>
+                                <div *ngIf="submitted && formsRegistra.controls['validaCodigo'].errors" class="invalid">
+                                    <ul>
+                                        <li class="text-danger">El codigo postal es obligatorio</li>    
+                                        <li class="text-danger">El codigo postal es de 5 dígitos</li>    
+                                    </ul>
+                                 </div>
+                            </div>
+
+                            <div class="col-lg-4">
+                                <label for="fechaCreacion">Fecha de Creación</label>
+                                <input formControlName="validaFecha" type="date" class="form-control" name="fechaCreacion" id="fechaCreacion" [(ngModel)]="sede!.fechaCreacion"   />
+                                <div *ngIf="submitted && formsRegistra.controls['validaFecha'].errors" class="invalid">
+                                    <ul>
+                                        <li class="text-danger">La fecha es obligatoria</li>    
+                                            
+                                    </ul>
+                                 </div>
+                            </div> 
 
 
 
