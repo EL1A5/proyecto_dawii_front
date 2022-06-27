@@ -1,6 +1,7 @@
 import { getLocaleDateFormat } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+//import { format } from 'path';
 import { Pais } from 'src/app/models/pais.model';
 import { Sede } from 'src/app/models/sede.model';
 import { PaisService } from 'src/app/services/pais.service';
@@ -17,10 +18,10 @@ export class CrudSedeComponent implements OnInit {
   sedes:Sede[]=[];
   filtro: string ="";
 
-  nombre:string="";
-  direccion:string="";
-  estado:boolean = true;
-  selPais:number = -1;
+  
+  fechacreacion="";
+  fchcrea=new Date(this.fechacreacion);
+ 
 
   paises?: Pais[] = [];;
 
@@ -30,6 +31,8 @@ export class CrudSedeComponent implements OnInit {
   nombre:"",
   direccion:"",
   estado: 1,
+  codigoPostal:"",
+  fechaCreacion:this.fchcrea,
   pais:{
     idPais:-1,
     iso:"-1",
@@ -42,6 +45,8 @@ export class CrudSedeComponent implements OnInit {
 formsRegistra = new FormGroup({
   validaNombre: new FormControl('', [Validators.required, Validators.pattern('[a-zA-Z ]{3,30}')]),
   validaDireccion: new FormControl('', [Validators.required,Validators.pattern('^.*(?=.*[0-9])(?=.*[a-zA-ZñÑ\s]).*$')]),
+  validaCodigo: new FormControl('', [Validators.required,Validators.pattern('[0-9]{5}')]),
+  validaFecha: new FormControl(''),
   validaPais: new FormControl('', [Validators.min(1)]),
 });
 
@@ -49,6 +54,8 @@ formsActualiza = new FormGroup({
 validaNombre: new FormControl('', [Validators.required, Validators.pattern('[a-zA-Z ]{3,30}')]),
 validaDireccion: new FormControl('', [Validators.required,Validators.pattern('^.*(?=.*[0-9])(?=.*[a-zA-ZñÑ\s]).*$')]),
 validaPais: new FormControl('', [Validators.min(1)]),
+validaCodigo: new FormControl('', [Validators.required,Validators.pattern('[0-9]{5}')]),
+validaFecha: new FormControl(''),
 validaEstado: new FormControl('', [Validators.min(0)]),
 });
 
@@ -86,7 +93,7 @@ registra(){
    
    this.submitted = false;
 
-   this.sedeService.registraSede(this.sede).subscribe(
+   this.sedeService.insertaSede(this.sede).subscribe(
          (x) => {
            document.getElementById("btn_reg_cerrar")?.click();
            Swal.fire('Mensaje', x.mensaje,'success');
@@ -105,6 +112,8 @@ registra(){
          nombre:"",
          direccion:"",
          estado:1,
+         codigoPostal:"",
+         fechaCreacion:this.fchcrea,
          pais:{
           idPais:-1,
           
