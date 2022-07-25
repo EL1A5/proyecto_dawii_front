@@ -1,6 +1,17 @@
-# Proyecto Frontend del DAWII - Cibertec
-### Spring, Angular, JPA y MYSQL
+## Descripción 
+Gestion de inventario de una tienda a nivl frontend hecho con angular.
 
 ## Autor 
+- ELIAS ROY PROVINCIA MAQQUERA
 
-* **Jorge Jacinto ** - [jorgejacinto9701](https://github.com/jorgejacinto9701)
+* [LinkedIn](https://www.linkedin.com/in/eliasprovincia/) 
+* [Porfolio web](https://eliasroy.github.io/portafolio/) 
+
+## Ver ejemplo en vivo 
+- [Proximamente...](https://www.linkedin.com/in/eliasprovincia/)
+
+## Instalación 
+Este proyecto no necesita de instalación.
+
+## Contratación 
+Si quieres contratarme puedes escribirme a PROVINCIAELIAS@GMAIL.COM para consultas. 
